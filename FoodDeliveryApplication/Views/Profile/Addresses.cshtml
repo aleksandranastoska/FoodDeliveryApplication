@@ -1,0 +1,96 @@
+﻿@using FoodDelivery.Domain.Domain
+@using FoodDelivery.Domain.Identity
+@{
+    var user = ViewBag.User as FoodDeliveryAppUser;
+    var addresses = ViewBag.Addresses as List<Address>;
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="shadow-sm bg-white h-100">
+                <div class="p-4 border-bottom">
+                    <div class="text-center">
+                        <h6 class="mb-2">@user.FirstName @user.LastName</h6>
+                        <p class="mb-1">@user.PhoneNumber</p>
+                        <p class="mb-1">@user.Email</p>
+                        <p class="mb-0 text-black font-weight-bold">
+                            <a class="btn btn-light" href="#">Edit Profile</a>
+                        </p>
+                    </div>
+                </div>
+                <ul class="nav nav-tabs flex-column border-0 p-3">
+                    <li class="nav-item">
+                        <a class="nav-link active">Current Orders</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active">Finished Orders</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active">Favorites</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" asp-action="Addresses" asp-route-email="@user.Email">My Addresses</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active">Log Out</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="shadow-sm bg-white p-4 h-100">
+                <div class="tab-content">
+                    <h4 class="font-weight-bold mt-0 mb-4">My Addresses</h4>
+                    <div class="modal fade">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Add address</h5>
+                                    <button type="button" class="close">
+                                        <span>x</span>
+                                    </button>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn d-flex w-50 text-center justify-content-center btn-outline-primary">Cancel</button>
+                                    <button type="submit" class="btn d-flex w-50 text-center justify-content-center btn-primary">Add</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        @foreach (var address in addresses)
+                        {
+                            <div class="col-md-6">
+                                <div class="bg-white card mb-4 border border-success">
+                                    <div class="p-4">
+                                        <div class="media">
+                                            <div class="media-body">
+                                                <a class="btn float-right mr-2">Delete</a>
+                                                <h6 class="mb-1 text-black">@address.Title</h6>
+                                                <p>@address.Street</p>
+                                                <p class="text-black">
+                                                    <span class="badge badge-gray">@address.Number</span>
+                                                    <span class="badge badge-gray">@address.Flat</span>
+                                                </p>
+                                                <p class="mb-0 text-black font-weight-bold">
+                                                    <a class="btn btn-sm btn-success mr-2">Deliver here</a>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        <div class="col-md-6">
+                            <div class="bg-white card mb-4 border p-5">
+                                <button class="btn btn-gray" type="button" asp-action="AddAddress"><a class="btn btn-primary" asp-action="AddAddress">Add New Address</a></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<a class="btn btn-primary" asp-action="AddAddress">Add New Address</a>

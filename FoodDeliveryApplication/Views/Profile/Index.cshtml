@@ -1,0 +1,57 @@
+﻿@model FoodDelivery.Domain.Identity.FoodDeliveryAppUser
+@{
+    ViewData["Title"] = "Index";
+}
+@{
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="shadow-sm bg-white h-100">
+                <div class="p-4 border-bottom">
+                    <div class="text-center">
+                        <h6 class="mb-2">@Model.FirstName @Model.LastName</h6>
+                        <p class="mb-1">@Model.PhoneNumber</p>
+                        <p class="mb-1">@Model.Email</p>
+                        <p class="mb-0 text-black font-weight-bold">
+                            <a class="btn btn-light" href="#">Edit Profile</a>
+                        </p>
+                    </div>
+                </div>
+                <ul class="nav nav-tabs flex-column border-0 p-3">
+                    <li class="nav-item">
+                        <a class="nav-link active">Current Orders</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active">Finished Orders</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active">Favorites</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" asp-action="Addresses" asp-route-id="@Model?.Email">My Addresses</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active">Log Out</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="shadow-sm bg-white p-4 h-100">
+                <div class="tab-content">
+                    <div>
+                        <div class="float-right">
+                            <a class="btn btn-sm">Help</a>
+                        </div>
+                        <div class="text-center">
+                            <h3>You have no active orders</h3>
+                            <h6>Fill the wishlist</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
