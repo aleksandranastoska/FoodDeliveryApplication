@@ -27,6 +27,7 @@ builder.Services.AddTransient<IRestaurantService, RestaurantService>();
 builder.Services.AddTransient<IUserService, UserService>();
 
 builder.Services.AddDefaultIdentity<FoodDeliveryAppUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
@@ -57,3 +58,20 @@ app.MapControllerRoute(
 app.MapRazorPages();
 
 app.Run();
+
+void SeedRoles(IApplicationBuilder app)
+{
+    using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+    {
+        var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+        var roles = new[] { "Owner", "Regular" };
+
+        foreach (var role in roles)
+        {
+            if (!roleManager.RoleExistsAsync(role).Result)
+            {
+                roleManager.CreateAsync(new IdentityRole(role)).Wait();
+            }
+        }
+    }
+}

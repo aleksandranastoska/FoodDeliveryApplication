@@ -1,4 +1,5 @@
 ﻿using FoodDelivery.Domain.Domain;
+using FoodDelivery.Domain.Enumerations;
 using Microsoft.AspNetCore.Identity;
 
 namespace FoodDelivery.Domain.Identity
@@ -10,5 +11,6 @@ namespace FoodDelivery.Domain.Identity
         public List<Address>? DeliveryAddress { get; set; }
         public virtual Wishlist Wishlist { get; set; }
         public virtual ICollection<Order>? Orders { get; set; }
+        public UserRole Role { get; set; }
     }
 }

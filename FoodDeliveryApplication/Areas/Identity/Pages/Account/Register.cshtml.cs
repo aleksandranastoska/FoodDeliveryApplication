@@ -10,6 +10,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
+using FoodDelivery.Domain.Enumerations;
 using FoodDelivery.Domain.Identity;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -89,6 +90,10 @@ namespace FoodDeliveryApplication.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Required]
+            [Display(Name ="Are you a restaurant owner")]
+            public bool IsRestaurantOwner { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -111,6 +116,16 @@ namespace FoodDeliveryApplication.Areas.Identity.Pages.Account
                 user.PhoneNumber = Input.PhoneNumber;
                 user.FirstName = Input.FirstName;
                 user.LastName = Input.LastName;
+
+                if (Input.IsRestaurantOwner)
+                {
+
+                   user.Role = UserRole.OWNER;
+                }
+                else
+                {
+                    user.Role = UserRole.REGULAR;
+                }
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
 

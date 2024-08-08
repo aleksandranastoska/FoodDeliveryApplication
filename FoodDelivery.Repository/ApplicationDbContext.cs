@@ -38,5 +38,28 @@ namespace FoodDelivery.Repository
                 optionsBuilder.UseSqlServer(connectionString, b => b.MigrationsAssembly("FoodDelivery.Repository"));
             }
         }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            SeedCategories(modelBuilder);
+        }
+
+        private void SeedCategories(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Category>().HasData(
+                new Category { Id = Guid.NewGuid(), Name = "Italian", Image = "italian.jpg" },
+                new Category { Id = Guid.NewGuid(), Name = "Chinese", Image = "chinese.jpg" },
+                new Category { Id = Guid.NewGuid(), Name = "Mexican", Image = "mexican.jpg" },
+                new Category { Id = Guid.NewGuid(), Name = "Indian", Image = "indian.jpg" },
+                new Category { Id = Guid.NewGuid(), Name = "American", Image = "american.jpg" },
+                new Category { Id = Guid.NewGuid(), Name = "Greek", Image = "greek.jpg" },
+                new Category { Id = Guid.NewGuid(), Name = "Vegan", Image = "vegan.jpg" },
+                new Category { Id = Guid.NewGuid(), Name = "Vegetarian", Image = "vegetarian.jpg" },
+                new Category { Id = Guid.NewGuid(), Name = "Healthy", Image = "healthy.jpg" },
+                new Category { Id = Guid.NewGuid(), Name = "Asian", Image = "asian.jpg" },
+                new Category { Id = Guid.NewGuid(), Name = "Breakfast", Image = "breakfast.jpg" },
+                new Category { Id = Guid.NewGuid(), Name = "Desserts", Image = "desserts.jpg" }
+            );
+        }
     }
 }
