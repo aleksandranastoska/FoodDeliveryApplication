@@ -9,5 +9,6 @@ namespace FoodDelivery.Repository.Interface
         void Insert(Restaurant restaurant);
         void Update(Restaurant restaurant);
         void Delete(Restaurant restaurant);
+        IEnumerable<Restaurant> GetAllRestaurantFromOwner(string ownerId);
     }
 }

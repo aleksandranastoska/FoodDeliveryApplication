@@ -9,5 +9,6 @@ namespace FoodDelivery.Service.Interface
         void CreateNewRestaurant(Restaurant r);
         void UpdateExistingRestaurant(Restaurant r);
         void DeleteExistingRestaurant(Guid? id);
+        List<Restaurant> GetAllRestaurantsFromOwner(string ownerId);
     }
 }

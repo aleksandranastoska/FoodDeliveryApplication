@@ -1,4 +1,6 @@
-﻿namespace FoodDelivery.Domain.Domain
+﻿using FoodDelivery.Domain.Identity;
+
+namespace FoodDelivery.Domain.Domain
 {
     public class Restaurant : BaseEntity
     {
@@ -15,5 +17,7 @@
         public TimeOnly? WorkingTo { get; set; }
         public string? PhoneNumber { get; set; }
         public virtual ICollection<CategoryInRestaurant>? CategoryInRestaurants { get; set; }
+        public string OwnerId { get; set; }
+        public FoodDeliveryAppUser Owner { get; set; }
     }
 }

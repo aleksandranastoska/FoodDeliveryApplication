@@ -1,58 +1,63 @@
-﻿@model IEnumerable<FoodDelivery.Domain.Domain.Restaurant>
+﻿@using FoodDelivery.Domain.Domain
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+@{
+    var restaurants = ViewBag.Restaurants as List<Restaurant>;
+}
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Add New Restaurant</a>
 </p>
+
+@if (restaurants.Count == 0)
+{
+        <p>No restaurants found</p>
+}
+else{
+    <p>Restaurants you own:</p>
+
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                Name
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Location)
+                Location
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Latitude)
+                Latitude)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Longitude)
+                Longitude
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Rating)
+                Rating
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.NumOfOrders)
+                IsAvailable
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TotalGrades)
+                DeliveryTime
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IsAvailable)
+                WorkingFrom
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DeliveryTime)
+                WorkingTo
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.WorkingFrom)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.WorkingTo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PhoneNumber)
+                PhoneNumber
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in restaurants) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
@@ -68,12 +73,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Rating)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NumOfOrders)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TotalGrades)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.IsAvailable)
@@ -99,3 +98,4 @@
 }
     </tbody>
 </table>
+}

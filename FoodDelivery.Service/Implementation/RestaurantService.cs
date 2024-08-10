@@ -29,6 +29,11 @@ namespace FoodDelivery.Service.Implementation
             return _restaurantRepository.GetAllRestaurants().ToList();
         }
 
+        public List<Restaurant> GetAllRestaurantsFromOwner(string ownerId)
+        {
+            return _restaurantRepository.GetAllRestaurantFromOwner(ownerId).ToList();
+        }
+
         public Restaurant GetDetailsForRestaurant(Guid? id)
         {
             return _restaurantRepository.GetRestaurantById(id);

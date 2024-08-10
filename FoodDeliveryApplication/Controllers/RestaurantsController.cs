@@ -2,21 +2,48 @@
 using Microsoft.EntityFrameworkCore;
 using FoodDelivery.Domain.Domain;
 using FoodDelivery.Service.Interface;
+using System.Security.Claims;
+using FoodDelivery.Domain.Identity;
+using Microsoft.AspNetCore.Identity;
+using FoodDelivery.Domain.DTO;
+using FoodDelivery.Domain.Helpers;
 
 namespace FoodDeliveryApplication.Controllers
 {
     public class RestaurantsController : Controller
     {
+        private readonly UserManager<FoodDeliveryAppUser> _userManager;
         private readonly IRestaurantService _restaurantService;
+        private readonly ICategoryService _categoryService;
 
-        public RestaurantsController(IRestaurantService restaurantService)
+        public RestaurantsController(UserManager<FoodDeliveryAppUser> userManager, IRestaurantService restaurantService, ICategoryService categoryService)
         {
+            _userManager = userManager;
             _restaurantService = restaurantService;
+            _categoryService = categoryService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View(_restaurantService.GetAllRestaurants());
+            var loggedInUser = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (loggedInUser == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var loggedInUserInfo = await _userManager.FindByIdAsync(loggedInUser);
+
+            var restaurants = _restaurantService.GetAllRestaurantsFromOwner(loggedInUser);
+
+            if (restaurants == null || !restaurants.Any())
+            {
+                restaurants = new List<Restaurant>();
+            }
+
+            ViewBag.Restaurants = restaurants;
+
+            return View();
         }
 
         public async Task<IActionResult> Details(Guid? id)
@@ -32,17 +59,38 @@ namespace FoodDeliveryApplication.Controllers
 
         public IActionResult Create()
         {
+            var categories = _categoryService.GetAllCategories();
+
+            ViewBag.Categories = categories;
+
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("Name,Location,Latitude,Longitude,Rating,NumOfOrders,IsAvailable,DeliveryTime,WorkingFrom,WorkingTo,PhoneNumber,Id")] Restaurant restaurant)
+        public async Task<IActionResult> Create(RestaurantDTO restaurantDTO, List<Guid> SelectedCategoryIds)
         {
+            var loggedInUser = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByIdAsync(loggedInUser);
+
+            var restaurant = CreateRestaurantHelper.CreateRestaurant(restaurantDTO, loggedInUser, user);
+            
             if (ModelState.IsValid)
             {
-                restaurant.Id = Guid.NewGuid();
+                restaurant.CategoryInRestaurants = new List<CategoryInRestaurant>();
+
+                foreach (var categoryId in SelectedCategoryIds)
+                {
+                    var category = _categoryService.GetDetailsForCategory(categoryId);
+
+                    if (category != null)
+                    {
+                        restaurant.CategoryInRestaurants.Add(CreateCategoryInRestaurantHelper.CreateCategoryInRestaurant(restaurant, category));
+                    }
+                }
+
                 _restaurantService.CreateNewRestaurant(restaurant);
+
                 return RedirectToAction(nameof(Index));
             }
 

@@ -4,6 +4,7 @@ using FoodDelivery.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FoodDelivery.Repository.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240808171203_RestaurantOwner")]
+    partial class RestaurantOwner
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -72,73 +75,73 @@ namespace FoodDelivery.Repository.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("7a43efa3-39e5-4c92-a4ff-a2bb744d719b"),
+                            Id = new Guid("05bc536f-14d8-49d8-8806-1e3a49d3c041"),
                             Image = "italian.jpg",
                             Name = "Italian"
                         },
                         new
                         {
-                            Id = new Guid("cd4b8192-0d21-42b1-aef1-8d66cac01473"),
+                            Id = new Guid("3b57b1fd-8e59-4027-a652-24dc147b1e71"),
                             Image = "chinese.jpg",
                             Name = "Chinese"
                         },
                         new
                         {
-                            Id = new Guid("fa9e2e7c-10f3-47e4-8093-032449d23d0e"),
+                            Id = new Guid("90b7f384-54d0-43d5-915d-531ccd599492"),
                             Image = "mexican.jpg",
                             Name = "Mexican"
                         },
                         new
                         {
-                            Id = new Guid("52d1e2d6-0f6b-4bb4-b0ed-962424e23fe2"),
+                            Id = new Guid("50f90525-5a30-49d7-ad4a-8a063429476b"),
                             Image = "indian.jpg",
                             Name = "Indian"
                         },
                         new
                         {
-                            Id = new Guid("67b9d731-e429-4e07-b78a-5c7b287f7947"),
+                            Id = new Guid("fa88acaa-1479-414a-a279-d4726bdb4684"),
                             Image = "american.jpg",
                             Name = "American"
                         },
                         new
                         {
-                            Id = new Guid("57099bc3-3729-409b-9984-971c5ca0bcf5"),
+                            Id = new Guid("6cd92d05-6a28-4dba-ba59-1e26b9dcc4ff"),
                             Image = "greek.jpg",
                             Name = "Greek"
                         },
                         new
                         {
-                            Id = new Guid("9f9bb46a-4e78-45cd-b9ae-01357862387d"),
+                            Id = new Guid("f6602b6e-2b2e-43b6-a6fb-9a39c9aacd40"),
                             Image = "vegan.jpg",
                             Name = "Vegan"
                         },
                         new
                         {
-                            Id = new Guid("1c091413-343a-4619-808d-cd8d0a1f3235"),
+                            Id = new Guid("80432401-7215-411d-a6fe-799d8bea4b00"),
                             Image = "vegetarian.jpg",
                             Name = "Vegetarian"
                         },
                         new
                         {
-                            Id = new Guid("9a46896e-8432-46ad-969e-e361d3bacb88"),
+                            Id = new Guid("b7b0bb30-f41c-424c-83fa-ca4c49500fbf"),
                             Image = "healthy.jpg",
                             Name = "Healthy"
                         },
                         new
                         {
-                            Id = new Guid("329f8886-2a01-447b-9c0c-82dfc43cd598"),
+                            Id = new Guid("aea320f8-5389-42f8-af02-91b406ed9cc7"),
                             Image = "asian.jpg",
                             Name = "Asian"
                         },
                         new
                         {
-                            Id = new Guid("23d513ae-1ff9-4dbb-997f-102ecc100933"),
+                            Id = new Guid("eb4e3e31-afb5-438d-b73c-4eb27df26c29"),
                             Image = "breakfast.jpg",
                             Name = "Breakfast"
                         },
                         new
                         {
-                            Id = new Guid("e9a49937-97c3-42f9-97fc-c9beb10ba2e7"),
+                            Id = new Guid("a38cecbf-643d-4bcd-a546-63750f0f4f5c"),
                             Image = "desserts.jpg",
                             Name = "Desserts"
                         });
@@ -381,7 +384,6 @@ namespace FoodDelivery.Repository.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("PhoneNumberConfirmed")

@@ -12,6 +12,7 @@ namespace FoodDelivery.Repository.Implementation
         public WishlistRepository(ApplicationDbContext context)
         {
             _context = context;
+            entities = context.Set<Wishlist>();
         }
 
         public void Delete(Wishlist wishlist)

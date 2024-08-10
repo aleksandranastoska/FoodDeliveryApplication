@@ -12,5 +12,6 @@ namespace FoodDelivery.Domain.Identity
         public virtual Wishlist Wishlist { get; set; }
         public virtual ICollection<Order>? Orders { get; set; }
         public UserRole Role { get; set; }
+        public string PhoneNumber { get; set; }
     }
 }

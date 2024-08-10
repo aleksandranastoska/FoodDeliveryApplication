@@ -21,10 +21,12 @@ builder.Services.AddScoped(typeof(IOrderRepository), typeof(OrderRepository));
 builder.Services.AddScoped(typeof(IRestaurantRepository), typeof(RestaurantRepository));
 builder.Services.AddScoped(typeof(IWishlistRepository), typeof(WishlistRepository));
 builder.Services.AddScoped(typeof(IAddressRepository), typeof(AddressRepository));
+builder.Services.AddScoped(typeof(ICategoryRepository), typeof(CategoryRepository));
 
 builder.Services.AddTransient<IFoodService, FoodService>();
 builder.Services.AddTransient<IRestaurantService, RestaurantService>();
 builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<ICategoryService, CategoryService>();
 
 builder.Services.AddDefaultIdentity<FoodDeliveryAppUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>()

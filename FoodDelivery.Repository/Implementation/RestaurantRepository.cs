@@ -12,6 +12,7 @@ namespace FoodDelivery.Repository.Implementation
         public RestaurantRepository(ApplicationDbContext context)
         {
             _context = context;
+            entities = context.Set<Restaurant>();
         }
 
         public void Delete(Restaurant restaurant)
@@ -19,6 +20,24 @@ namespace FoodDelivery.Repository.Implementation
             CheckIfEntityIsNull(restaurant);
             entities.Remove(restaurant);
             _context.SaveChanges();
+        }
+
+        public IEnumerable<Restaurant> GetAllRestaurantFromOwner(string ownerId)
+        {
+            if (string.IsNullOrEmpty(ownerId))
+            {
+                throw new ArgumentNullException(nameof(ownerId));
+            }
+
+            var entities = _context.Restaurants.AsQueryable();
+
+            if (entities == null)
+            {
+                return new List<Restaurant>();
+            }
+
+            return entities
+                .Where(r => r.OwnerId == ownerId);
         }
 
         public IEnumerable<Restaurant> GetAllRestaurants()

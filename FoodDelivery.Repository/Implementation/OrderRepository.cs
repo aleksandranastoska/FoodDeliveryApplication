@@ -13,6 +13,7 @@ namespace FoodDelivery.Repository.Implementation
         public OrderRepository(ApplicationDbContext context)
         {
             _context = context;
+            entities = context.Set<Order>();
         }
 
         public List<Order> GetAll()
