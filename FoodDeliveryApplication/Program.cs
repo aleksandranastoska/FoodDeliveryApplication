@@ -1,3 +1,4 @@
+using FoodDelivery.Domain.Helpers;
 using FoodDelivery.Domain.Identity;
 using FoodDelivery.Repository;
 using FoodDelivery.Repository.Implementation;
@@ -22,11 +23,15 @@ builder.Services.AddScoped(typeof(IRestaurantRepository), typeof(RestaurantRepos
 builder.Services.AddScoped(typeof(IWishlistRepository), typeof(WishlistRepository));
 builder.Services.AddScoped(typeof(IAddressRepository), typeof(AddressRepository));
 builder.Services.AddScoped(typeof(ICategoryRepository), typeof(CategoryRepository));
+builder.Services.AddScoped(typeof(IFoodCategoryRepository), typeof(FoodCategoryRepository));
 
 builder.Services.AddTransient<IFoodService, FoodService>();
 builder.Services.AddTransient<IRestaurantService, RestaurantService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
+builder.Services.AddTransient<IFoodCategoryService, FoodCategoryService>();
+
+builder.Services.AddScoped<CreateRestaurantHelper>();
 
 builder.Services.AddDefaultIdentity<FoodDeliveryAppUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>()

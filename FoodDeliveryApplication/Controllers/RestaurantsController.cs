@@ -7,6 +7,7 @@ using FoodDelivery.Domain.Identity;
 using Microsoft.AspNetCore.Identity;
 using FoodDelivery.Domain.DTO;
 using FoodDelivery.Domain.Helpers;
+using NuGet.Packaging;
 
 namespace FoodDeliveryApplication.Controllers
 {
@@ -15,12 +16,16 @@ namespace FoodDeliveryApplication.Controllers
         private readonly UserManager<FoodDeliveryAppUser> _userManager;
         private readonly IRestaurantService _restaurantService;
         private readonly ICategoryService _categoryService;
+        private readonly IFoodCategoryService _foodCategoryService;
+        private readonly CreateRestaurantHelper _createRestaurantHelper;
 
-        public RestaurantsController(UserManager<FoodDeliveryAppUser> userManager, IRestaurantService restaurantService, ICategoryService categoryService)
+        public RestaurantsController(UserManager<FoodDeliveryAppUser> userManager, IRestaurantService restaurantService, ICategoryService categoryService, IFoodCategoryService foodCategoryService, CreateRestaurantHelper createRestaurantHelper)
         {
             _userManager = userManager;
             _restaurantService = restaurantService;
             _categoryService = categoryService;
+            _foodCategoryService = foodCategoryService;
+            _createRestaurantHelper = createRestaurantHelper;
         }
 
         public async Task<IActionResult> Index()
@@ -54,6 +59,12 @@ namespace FoodDeliveryApplication.Controllers
 
             if (!RestaurantExists(restaurant.Id)) return NotFound();
 
+            var categories = _restaurantService.GetCategoriesForRestaurant(restaurant.Id);
+            var foodCategories = _foodCategoryService.GetAllFoodCategories();
+
+            ViewBag.Categories = categories;
+            ViewBag.FoodCategories = foodCategories;
+
             return View(restaurant);
         }
 
@@ -73,8 +84,8 @@ namespace FoodDeliveryApplication.Controllers
             var loggedInUser = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = await _userManager.FindByIdAsync(loggedInUser);
 
-            var restaurant = CreateRestaurantHelper.CreateRestaurant(restaurantDTO, loggedInUser, user);
-            
+            var restaurant = await _createRestaurantHelper.CreateRestaurant(restaurantDTO, loggedInUser);
+
             if (ModelState.IsValid)
             {
                 restaurant.CategoryInRestaurants = new List<CategoryInRestaurant>();
@@ -155,6 +166,68 @@ namespace FoodDeliveryApplication.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpGet]
+        public IActionResult CreateMenu(Guid Id)
+        {
+            var restaurant = _restaurantService.GetDetailsForRestaurant(Id);
+
+            ViewBag.FoodCategories = _foodCategoryService.GetAllFoodCategories();
+            ViewBag.Restaurant = restaurant;
+
+            object menuDto = null;
+
+            if (restaurant.Menu.Count != 0)
+            {
+                menuDto = new MenuDTO
+                {
+                    RestaurantId = restaurant.Id,
+                    ExistingMenu = (List<Food>)restaurant.Menu,
+                    NewMenu = new List<Food>()
+                };
+            }
+            else
+            {
+                menuDto = new MenuDTO
+                {
+                    RestaurantId = restaurant.Id,
+                    ExistingMenu = new List<Food>(),
+                    NewMenu = new List<Food>()
+                };
+            }
+
+            return View(menuDto);
+        }
+        [HttpPost]
+        public IActionResult CreateMenu(MenuDTO menuDTO)
+        {
+            if (ModelState.IsValid)
+            {
+                var existingRestaurant = _restaurantService.GetDetailsForRestaurant(menuDTO.RestaurantId);
+
+                Restaurant res = _createRestaurantHelper.CreateRestaurantFromMenu(existingRestaurant);
+
+                if (existingRestaurant != null)
+                {
+                    foreach (var food in menuDTO.ExistingMenu)
+                    {
+                        food.RestaurantId = res.Id;
+                    }
+
+                    var newMenuItems = MenuCreator(menuDTO, res.Id);
+
+                    _restaurantService.DeleteExistingRestaurant(existingRestaurant.Id);
+
+                    res.Menu.AddRange(newMenuItems);
+                    _restaurantService.CreateNewRestaurant(res);
+                }
+
+                return RedirectToAction("Details", new { id = res.Id });
+            }
+            ViewBag.FoodCategories = _foodCategoryService.GetAllFoodCategories();
+
+            return View(menuDTO);
+        }
+
         private bool RestaurantExists(Guid id)
         {
             return _restaurantService.GetDetailsForRestaurant(id) != null;
@@ -164,5 +237,19 @@ namespace FoodDeliveryApplication.Controllers
         {
             return id == null;
         }
+        private List<Food> MenuCreator(MenuDTO menuDTO, Guid id)
+        {
+
+            return menuDTO.NewMenu.Select(food => new Food
+            {
+                Id = Guid.NewGuid(),
+                Name = food.Name,
+                Price = food.Price,
+                Description = food.Description,
+                FoodCategoryId = food.FoodCategoryId,
+                RestaurantId = id
+            }).ToList();
+        }}
+    
     }
-}
+

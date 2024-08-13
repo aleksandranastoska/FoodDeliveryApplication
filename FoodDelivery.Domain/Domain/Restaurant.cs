@@ -19,5 +19,6 @@ namespace FoodDelivery.Domain.Domain
         public virtual ICollection<CategoryInRestaurant>? CategoryInRestaurants { get; set; }
         public string OwnerId { get; set; }
         public FoodDeliveryAppUser Owner { get; set; }
+        public ICollection<Food> Menu { get; set; } = new List<Food>();
     }
 }

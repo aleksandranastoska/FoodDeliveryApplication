@@ -30,7 +30,9 @@ namespace FoodDelivery.Repository.Implementation
         public List<Food> GetAllFoodsForRestaurant(Guid? restaurantId)
         {
             return entities
-                .Where(f => f.RestaurantId == restaurantId).ToList();
+                .Where(f => f.RestaurantId == restaurantId)
+                .Include(f=>f.FoodCategory)
+                .ToList();
         }
 
         public Food GetFoodById(Guid? id)

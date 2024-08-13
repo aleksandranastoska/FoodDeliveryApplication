@@ -1,11 +1,19 @@
 ﻿using FoodDelivery.Domain.Domain;
 using FoodDelivery.Domain.DTO;
+using FoodDelivery.Domain.Identity;
+using Microsoft.AspNetCore.Identity;
 
 namespace FoodDelivery.Domain.Helpers
 {
     public class CreateRestaurantHelper
     {
-        public static Restaurant CreateRestaurant(RestaurantDTO restaurantDTO, string loggedInUser, Identity.FoodDeliveryAppUser? user)
+        private readonly UserManager<FoodDeliveryAppUser> _userManager;
+
+        public CreateRestaurantHelper(UserManager<FoodDeliveryAppUser> userManager)
+        {
+            _userManager = userManager;
+        }
+        public async Task<Restaurant> CreateRestaurant(RestaurantDTO restaurantDTO, string loggedInUser)
         {
 
            return new Restaurant
@@ -24,8 +32,31 @@ namespace FoodDelivery.Domain.Helpers
                WorkingTo = restaurantDTO.WorkingTo,
                PhoneNumber = restaurantDTO.PhoneNumber,
                OwnerId = loggedInUser,
-               Owner = user
+               Owner = await _userManager.FindByIdAsync(loggedInUser)
            };
+        }
+
+        public Restaurant CreateRestaurantFromMenu(Restaurant restaurant)
+        {
+            return new Restaurant
+            {
+                Id = Guid.NewGuid(),
+                Name = restaurant.Name,
+                Location = restaurant.Location,
+                Latitude = restaurant.Latitude,
+                Longitude = restaurant.Longitude,
+                Rating = restaurant.Rating,
+                NumOfOrders = restaurant.NumOfOrders,
+                TotalGrades = restaurant.TotalGrades,
+                IsAvailable = restaurant.IsAvailable,
+                DeliveryTime = restaurant.DeliveryTime,
+                WorkingFrom = restaurant.WorkingFrom,
+                WorkingTo = restaurant.WorkingTo,
+                PhoneNumber = restaurant.PhoneNumber,
+                OwnerId = restaurant.OwnerId,
+                Owner = restaurant.Owner,
+                Menu = restaurant.Menu
+            };
         }
     }
 }

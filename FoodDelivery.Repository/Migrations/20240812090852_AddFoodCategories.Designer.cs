@@ -4,6 +4,7 @@ using FoodDelivery.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FoodDelivery.Repository.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240812090852_AddFoodCategories")]
+    partial class AddFoodCategories
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -72,73 +75,73 @@ namespace FoodDelivery.Repository.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("1ed54c17-242a-422a-8dec-d9b4e2458e44"),
+                            Id = new Guid("c9900113-0447-4af8-b401-347189a853d6"),
                             Image = "italian.jpg",
                             Name = "Italian"
                         },
                         new
                         {
-                            Id = new Guid("d2c585ea-6e80-4abf-91c9-0e83baea2d8a"),
+                            Id = new Guid("3a4d3462-6458-418a-8a0b-cd5c16e63548"),
                             Image = "chinese.jpg",
                             Name = "Chinese"
                         },
                         new
                         {
-                            Id = new Guid("0e78a8ba-3ece-4c8a-9aac-4b89a627b387"),
+                            Id = new Guid("8f3a5db5-b268-47ed-871f-2f35a7cf66cd"),
                             Image = "mexican.jpg",
                             Name = "Mexican"
                         },
                         new
                         {
-                            Id = new Guid("251fc0db-938c-4313-bcf9-ce6fa53c6217"),
+                            Id = new Guid("47399d80-4aa2-4a70-9a0b-83aaa04909eb"),
                             Image = "indian.jpg",
                             Name = "Indian"
                         },
                         new
                         {
-                            Id = new Guid("52fecafd-0337-48a7-acb1-235ced024aca"),
+                            Id = new Guid("d280fd46-614e-4d4b-b58c-01b0d81d9b59"),
                             Image = "american.jpg",
                             Name = "American"
                         },
                         new
                         {
-                            Id = new Guid("d54d69ec-a01a-40df-bad4-0cd5547fc634"),
+                            Id = new Guid("b4f5f679-f570-4b21-b14e-7313de863ac8"),
                             Image = "greek.jpg",
                             Name = "Greek"
                         },
                         new
                         {
-                            Id = new Guid("dba2474f-c42b-4eac-9c07-2f14e0728fe7"),
+                            Id = new Guid("c2150289-066e-431a-a55a-e41adbdccc3c"),
                             Image = "vegan.jpg",
                             Name = "Vegan"
                         },
                         new
                         {
-                            Id = new Guid("60705633-8f10-4892-a2ec-efdbe14cd0ec"),
+                            Id = new Guid("81308382-0d2c-49b9-83fd-c52b1183eb51"),
                             Image = "vegetarian.jpg",
                             Name = "Vegetarian"
                         },
                         new
                         {
-                            Id = new Guid("a4badf53-5d2e-4f69-a997-558bd938db45"),
+                            Id = new Guid("09383e83-3d6c-4b6c-9a1f-b3ab673667fb"),
                             Image = "healthy.jpg",
                             Name = "Healthy"
                         },
                         new
                         {
-                            Id = new Guid("6cf72789-a673-45b0-a102-9f099d7c2b97"),
+                            Id = new Guid("1cd0ae48-2bb8-4cf7-8fa3-42691b8d1b70"),
                             Image = "asian.jpg",
                             Name = "Asian"
                         },
                         new
                         {
-                            Id = new Guid("1ff749fc-84de-4e17-a5f2-50729b01d477"),
+                            Id = new Guid("ee62be3c-79d8-409a-b121-73af49641046"),
                             Image = "breakfast.jpg",
                             Name = "Breakfast"
                         },
                         new
                         {
-                            Id = new Guid("d651ab1b-cef2-4db0-94e5-e0303b2fda20"),
+                            Id = new Guid("a2e088da-e338-4194-a70e-2970d69f7164"),
                             Image = "desserts.jpg",
                             Name = "Desserts"
                         });
@@ -214,77 +217,77 @@ namespace FoodDelivery.Repository.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("58518393-014d-4cdc-a7c7-3a1da775a992"),
+                            Id = new Guid("1096a2f9-a75e-4c6a-a26c-4442a219a753"),
                             Name = "Breakfast"
                         },
                         new
                         {
-                            Id = new Guid("02a21863-600a-4289-b850-abfdefa2d151"),
+                            Id = new Guid("8660c831-2d09-4af1-b54d-49b7e1638434"),
                             Name = "Salads"
                         },
                         new
                         {
-                            Id = new Guid("fd06fc83-9fa8-4298-b098-92058bd1cbaa"),
+                            Id = new Guid("387c4800-1092-4808-abf2-c256674d489a"),
                             Name = "Pasta"
                         },
                         new
                         {
-                            Id = new Guid("ab48720a-5cc1-4586-8774-cf848f3df1f3"),
+                            Id = new Guid("c66e1223-ead4-4c77-80c9-3806f90cf44f"),
                             Name = "Pizza"
                         },
                         new
                         {
-                            Id = new Guid("e9326043-cfd6-4cbf-b5dd-5f6f887df569"),
+                            Id = new Guid("3d5e124f-795c-484d-a1e1-9e3dbbe056cf"),
                             Name = "Desserts"
                         },
                         new
                         {
-                            Id = new Guid("cb0b21f3-51e8-4f80-91e9-b36f3c8dde72"),
+                            Id = new Guid("32f9d6e3-6d56-4362-a028-473058070322"),
                             Name = "Alcoholic Beverages"
                         },
                         new
                         {
-                            Id = new Guid("630fc521-5b63-4cd4-99b8-9eea377542c2"),
+                            Id = new Guid("24a5d8bc-b123-44c6-af7e-aafea5a40151"),
                             Name = "Soft Drinks"
                         },
                         new
                         {
-                            Id = new Guid("52e71a8c-5aa8-4bad-b18d-d888fa0026d4"),
+                            Id = new Guid("7d1d8aef-d217-41e3-b4f0-8f7c7cb4a814"),
                             Name = "Hot Drinks"
                         },
                         new
                         {
-                            Id = new Guid("2168a8a4-34f8-49b4-bdf3-71b4764a7f33"),
+                            Id = new Guid("895488aa-2322-414e-b0cf-379e9f571be2"),
                             Name = "Coffee"
                         },
                         new
                         {
-                            Id = new Guid("1232522d-628e-4a62-a9d6-d70a16cc0975"),
+                            Id = new Guid("d730c473-dee2-4127-bc82-ea63509eefc6"),
                             Name = "Main Course"
                         },
                         new
                         {
-                            Id = new Guid("6a871b3d-484a-4304-b95b-d3c5715a3ee1"),
+                            Id = new Guid("9bbb8900-ef9b-4b61-a7bf-ae0c6986a783"),
                             Name = "Starters"
                         },
                         new
                         {
-                            Id = new Guid("d5ff2a03-e375-4c33-bb02-15452073faa9"),
+                            Id = new Guid("1687f0f2-158f-487f-90aa-5ee084a8c561"),
                             Name = "Brunch"
                         },
                         new
                         {
-                            Id = new Guid("af833888-1ba5-49f5-b2b9-49f6f3a7ffcb"),
+                            Id = new Guid("556ef99b-f76b-419e-93f7-95a675a619ba"),
                             Name = "Burgers"
                         },
                         new
                         {
-                            Id = new Guid("391afc2a-3bd8-4c96-b8e5-911cebd49f09"),
+                            Id = new Guid("9e019ef1-f0e5-4f2a-bef4-75dfeaaf680a"),
                             Name = "Sandwiches"
                         },
                         new
                         {
-                            Id = new Guid("3ceb2b3a-1e4f-48a1-b064-d4660b0d6741"),
+                            Id = new Guid("f4e1967e-6623-480e-91b0-366a2fd2378d"),
                             Name = "Juices"
                         });
                 });

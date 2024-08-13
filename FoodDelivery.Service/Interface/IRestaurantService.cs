@@ -10,5 +10,6 @@ namespace FoodDelivery.Service.Interface
         void UpdateExistingRestaurant(Restaurant r);
         void DeleteExistingRestaurant(Guid? id);
         List<Restaurant> GetAllRestaurantsFromOwner(string ownerId);
+        List<Category> GetCategoriesForRestaurant(Guid restaurantId);
     }
 }

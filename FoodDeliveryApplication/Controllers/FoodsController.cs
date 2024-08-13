@@ -136,9 +136,10 @@ namespace FoodDeliveryApplication.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(Guid id)
         {
+            var restaurantId = _foodService.GetDetailsForFood(id).RestaurantId;
             _foodService.DeleteExistingFood(id);
-            
-            return RedirectToAction(nameof(Index));
+
+            return RedirectToAction("Details", "Restaurants", new { id = restaurantId });
         }
 
         private bool FoodExists(Guid id)

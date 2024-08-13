@@ -10,5 +10,6 @@ namespace FoodDelivery.Repository.Interface
         void Update(Restaurant restaurant);
         void Delete(Restaurant restaurant);
         IEnumerable<Restaurant> GetAllRestaurantFromOwner(string ownerId);
+        IEnumerable<Category> GetCategoriesForRestaurant(Guid restaurantId);
     }
 }

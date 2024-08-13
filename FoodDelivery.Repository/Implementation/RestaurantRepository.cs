@@ -8,11 +8,14 @@ namespace FoodDelivery.Repository.Implementation
     {
         private readonly ApplicationDbContext _context;
         private DbSet<Restaurant> entities;
+        private DbSet<CategoryInRestaurant> categoryInRestaurants;
+        
 
         public RestaurantRepository(ApplicationDbContext context)
         {
             _context = context;
             entities = context.Set<Restaurant>();
+            categoryInRestaurants = context.Set<CategoryInRestaurant>();
         }
 
         public void Delete(Restaurant restaurant)
@@ -45,9 +48,37 @@ namespace FoodDelivery.Repository.Implementation
             return entities.AsEnumerable();
         }
 
+        public IEnumerable<Category> GetCategoriesForRestaurant(Guid restaurantId)
+        {
+            var selectedCategories =  categoryInRestaurants
+                .Where(u => u.RestaurantId == restaurantId)
+                .AsEnumerable();
+
+            var categoriesIds = new List<Guid>();
+
+            foreach (var category in selectedCategories) {
+                categoriesIds.Add(category.CategoryId);
+            }
+
+            var categories = new List<Category>();
+
+            foreach (var categoryId in categoriesIds) {
+                var category = _context.Categories
+                    .SingleOrDefault(c => c.Id == categoryId);
+
+                categories.Add(category);
+            }
+
+            return categories.AsEnumerable();
+        }
+
         public Restaurant GetRestaurantById(Guid? id)
         {
-            return entities.SingleOrDefault(r => r.Id == id);
+            return entities
+                .Include(r=>r.Owner)
+                .Include(r=>r.Menu)
+                .ThenInclude(f => f.FoodCategory)
+                .SingleOrDefault(r => r.Id == id);
         }
 
         public void Insert(Restaurant restaurant)

@@ -17,6 +17,8 @@ namespace FoodDelivery.Repository
         public DbSet<CategoryInRestaurant> CategoryInRestaurants { get; set; }
         public DbSet<FoodInOrder> FoodInOrders { get; set; }
         public DbSet<FoodInWishlist> FoodInWishlists { get; set; }
+        public DbSet<FoodCategory> FoodCategories { get; set; }
+
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -42,6 +44,7 @@ namespace FoodDelivery.Repository
         {
             base.OnModelCreating(modelBuilder);
             SeedCategories(modelBuilder);
+            SeedFoodCategories(modelBuilder);
         }
 
         private void SeedCategories(ModelBuilder modelBuilder)
@@ -59,6 +62,27 @@ namespace FoodDelivery.Repository
                 new Category { Id = Guid.NewGuid(), Name = "Asian", Image = "asian.jpg" },
                 new Category { Id = Guid.NewGuid(), Name = "Breakfast", Image = "breakfast.jpg" },
                 new Category { Id = Guid.NewGuid(), Name = "Desserts", Image = "desserts.jpg" }
+            );
+        }
+
+        private void SeedFoodCategories(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<FoodCategory>().HasData(
+                new FoodCategory { Id = Guid.NewGuid(), Name = "Breakfast"},
+                new FoodCategory { Id = Guid.NewGuid(), Name = "Salads" },
+                new FoodCategory { Id = Guid.NewGuid(), Name = "Pasta"},
+                new FoodCategory { Id = Guid.NewGuid(), Name = "Pizza" },
+                new FoodCategory { Id = Guid.NewGuid(), Name = "Desserts" },
+                new FoodCategory { Id = Guid.NewGuid(), Name = "Alcoholic Beverages" },
+                new FoodCategory { Id = Guid.NewGuid(), Name = "Soft Drinks" },
+                new FoodCategory { Id = Guid.NewGuid(), Name = "Hot Drinks" },
+                new FoodCategory { Id = Guid.NewGuid(), Name = "Coffee"},
+                new FoodCategory { Id = Guid.NewGuid(), Name = "Main Course" },
+                new FoodCategory { Id = Guid.NewGuid(), Name = "Starters" },
+                new FoodCategory { Id = Guid.NewGuid(), Name = "Brunch" },
+                new FoodCategory { Id = Guid.NewGuid(), Name = "Burgers" },
+                new FoodCategory { Id = Guid.NewGuid(), Name = "Sandwiches" },
+                new FoodCategory { Id = Guid.NewGuid(), Name = "Juices" }
             );
         }
     }
