@@ -3,6 +3,10 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FoodDelivery.Domain.Domain;
 using FoodDelivery.Service.Interface;
+using Microsoft.AspNetCore.Identity;
+using FoodDelivery.Domain.Identity;
+using System.Security.Claims;
+using FoodDelivery.Repository.Interface;
 
 namespace FoodDeliveryApplication.Controllers
 {
@@ -10,13 +14,16 @@ namespace FoodDeliveryApplication.Controllers
     {
         private readonly IFoodService _foodService;
         private readonly IRestaurantService restaurantService;
+        private readonly UserManager<FoodDeliveryAppUser> _userManager;
+        private readonly IWishlistRepository _wishlistRepository;
 
-        public FoodsController(IFoodService foodService, IRestaurantService restaurantService)
+        public FoodsController(IFoodService foodService, IRestaurantService restaurantService, UserManager<FoodDeliveryAppUser> userManager, IWishlistRepository wishlistRepository)
         {
             _foodService = foodService;
             this.restaurantService = restaurantService;
+            _userManager = userManager;
+            _wishlistRepository = wishlistRepository;
         }
-
 
         public IActionResult Index()
         {
@@ -146,5 +153,58 @@ namespace FoodDeliveryApplication.Controllers
         {
             return _foodService.GetDetailsForFood(id) != null;
         }
+
+        [HttpPost]
+        public async Task<IActionResult> AddToWishlist(Guid id, int quantity)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);  
+
+            if (userId == null)
+            {
+                return Unauthorized();  
+            }
+
+            var wishlist = _wishlistRepository.GetWishlistByUserId(userId);
+
+            if (wishlist == null)
+            {
+                wishlist = new Wishlist
+                {
+                    UserId = userId,
+                    FoodInWishlists = new List<FoodInWishlist>()
+                };
+
+                _wishlistRepository.Insert(wishlist);
+            }
+
+            var food = _foodService.GetDetailsForFood(id);
+
+            if (!wishlist.FoodInWishlists.Any(f => f.FoodId == id))
+            {
+
+                if (food == null)
+                {
+                    return NotFound();  
+                }
+
+                var foodInWishlist = new FoodInWishlist
+                {
+                    FoodId = food.Id,
+                    WishlistId = wishlist.Id,
+                    Quantity = quantity
+                };
+
+                wishlist.FoodInWishlists.Add(foodInWishlist);
+                
+            } else
+            {
+                wishlist.FoodInWishlists.SingleOrDefault(f => f.FoodId == id).Quantity++;
+            }
+
+            _wishlistRepository.Update(wishlist);
+
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
+
     }
 }

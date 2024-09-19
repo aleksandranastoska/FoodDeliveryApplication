@@ -44,6 +44,14 @@ namespace FoodDelivery.Service.Implementation
             return _restaurantRepository.GetRestaurantById(id);
         }
 
+        public bool IsRestaurantFavoriteForUser(string userId, Guid restaurantId)
+        {
+            var restaurant = _restaurantRepository.GetRestaurantById(restaurantId);
+            var favoriteRestaurant = restaurant.FavoriteRestaurants
+                .FirstOrDefault(fr => fr.OwnerId == userId);
+            return favoriteRestaurant != null;
+        }
+
         public void UpdateExistingRestaurant(Restaurant r)
         {
             _restaurantRepository.Update(r);

@@ -10,6 +10,7 @@
         public TimeOnly? WorkingFrom { get; set; }
         public TimeOnly? WorkingTo { get; set; }
         public string? PhoneNumber { get; set; }
+        public string? RestaurantImage { get; set; }
     }
 }
 

@@ -98,5 +98,25 @@ namespace FoodDeliveryApplication.Controllers
 
             return View(model);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> AddToFavorites(Guid restaurantId)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); 
+            if (userId == null)
+            {
+                return Unauthorized(); 
+            }
+
+            var result = await _userService.AddToFavorites(userId, restaurantId);
+
+            if (!result)
+            {
+                return StatusCode(500, "Unable to add to favorites"); 
+            }
+
+            return Ok();
+        }
+
     }
 }

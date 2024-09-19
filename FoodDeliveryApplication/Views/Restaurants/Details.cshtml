@@ -2,8 +2,8 @@
 @model FoodDelivery.Domain.Domain.Restaurant
 
 @{
-    var categories = ViewBag.Categories as List<Category>;
-    var foodCategories = ViewBag.FoodCategories as List<FoodCategory>;
+    var isFavorite = ViewBag.IsFavorite as bool?;
+    var isFavoriteValue = isFavorite ?? false;
 }
 
 @{
@@ -11,9 +11,6 @@
 }
 
 <div class="container">
-    <div class="text-center">
-        <img class="img-fluid cover" src="">
-    </div>
     <div class="container">
         <div class="container">
             <div class="row d-flex align-items-md-end">
@@ -33,7 +30,13 @@
                     <div class="text-right">
                         <button class="btn btn-warning m-lg-2 plxs-0" type="button">@Model.DeliveryTime</button>
                         <button class="btn btn-warning m-lg-2 plxs-0" type="button">@Model.Rating</button>
-                        <a class="btn btn-warning ml-2">Add to Favorites</a>
+                        <a id="favorite-button"
+                           data-restaurant-id="@Model.Id"
+                           class="btn @(isFavoriteValue ? "btn-success" : "btn-warning") ml-2"
+                           href="javascript:void(0);">
+                            @(isFavoriteValue ? "Favorite" : "Add to Favorites")
+                        </a>
+
                         <button class="btn btn-warning text-white m-lg-2">Info</button>
                     </div>
                 </div>
@@ -42,22 +45,7 @@
     </div>
 </div>
 
-<section class="sticky-md-top bg-white border-top-0 shadow-sm">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <ul class="nav" role="tablist">
-                    @foreach(var category in categories)
-                    {
-                        <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#@category.Name" role="tab">@category.Name</a>
-                        </li>
-                    }
-                </ul>
-            </div>
-        </div>
-    </div>
-</section>
+
 
 <section>
     <div class="container">
@@ -69,6 +57,9 @@
 {
     <li class="nav-item">
         <a class="nav-link" asp-controller="Restaurants" asp-action="CreateMenu" asp-route-id="@Model.Id">Create Menu</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" asp-controller="Restaurants" asp-action="Edit" asp-route-id="@Model.Id">Edit Details</a>
     </li>
 }
 
@@ -86,11 +77,31 @@
                 <ul class="list-group">
                     @foreach (var item in group)
                     {
-                        <li class="list-group-item">
-                            <h6>@item.Name</h6>
-                            <p>@item.Description</p>
-                            <p>Price: @item.Price</p>
-                        </li>
+                        <div class="card" style="width: 18rem; height: 35rem">
+                            <img class="card-img-top" src="@item.Image" alt="Card image cap">
+                            <div class="card-body">
+                                <h5 class="card-title">@item.Name</h5>
+                                <p class="card-text">@item.Description</p>
+                                <h6>Price: @item.Price</h6>
+
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <button class="btn btn-outline-secondary" type="button" onclick="decreaseQuantity('@item.Id', @item.Price)">-</button>
+                                    </div>
+                                    <input type="text" class="form-control text-center" value="1" id="quantity-@item.Id" readonly>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" type="button" onclick="increaseQuantity('@item.Id', @item.Price)">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <form method="post" asp-controller="Foods" asp-action="AddToWishlist" asp-route-id="@item.Id">
+                                    <input type="hidden" name="quantity" id="hidden-quantity-@item.Id" value="1" />
+                                    <button type="submit" class="btn btn-info">Add to Wishlist</button>
+                                </form>
+                            </div>
+
+                        </div>
                     }
                 </ul>
             }
@@ -106,3 +117,78 @@
     <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#favorite-button').click(function (event) {
+            event.preventDefault(); 
+
+            var restaurantId = $(this).data('restaurant-id');
+            var token = $('input[name="__RequestVerificationToken"]').val();  
+
+            $.ajax({
+                url: '@Url.Action("AddToFavorites", "Profile")',
+                type: 'POST',
+                data: {
+                    restaurantId: restaurantId,
+                    __RequestVerificationToken: token
+                },
+                success: function () {
+                    $('#favorite-button').text('Favorited').removeClass('btn-warning').addClass('btn-success');
+                },
+                error: function () {
+                    alert('Failed to add to favorites');
+                }
+            });
+        });
+        $('.add-to-wishlist').click(function (event) {
+            event.preventDefault(); 
+
+            var foodId = $(this).data('food-id');
+            var button = $(this);
+            var token = $('input[name="__RequestVerificationToken"]').val();
+
+            $.ajax({
+                url: '/Foods/AddToWishlist/' + foodId,  
+                type: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': token
+                },
+                success: function () {
+                    button.text('Added to Wishlist').removeClass('btn-info').addClass('btn-success');
+                },
+                error: function () {
+                    alert('Failed to add to wishlist');
+                }
+            });
+        });
+    });
+
+    function decreaseQuantity(foodId, foodPrice) {
+        var quantityInput = document.getElementById('quantity-' + foodId);
+        var hiddenQuantityInput = document.getElementById('hidden-quantity-' + foodId);
+        if (quantityInput) {
+            var currentQuantity = parseInt(quantityInput.value);
+            if (currentQuantity > 1) {
+                quantityInput.value = currentQuantity - 1;
+                hiddenQuantityInput.value = currentQuantity - 1;
+            }
+        } else {
+            console.error('Quantity input element not found for ID:', foodId);
+        }
+    }
+
+    function increaseQuantity(foodId, foodPrice) {
+        var quantityInput = document.getElementById('quantity-' + foodId);
+        var hiddenQuantityInput = document.getElementById('hidden-quantity-' + foodId);
+        if (quantityInput) {
+            var currentQuantity = parseInt(quantityInput.value);
+            quantityInput.value = currentQuantity + 1;
+            hiddenQuantityInput.value = currentQuantity + 1;
+        } else {
+            console.error('Quantity input element not found for ID:', foodId);
+        }
+    }
+</script>

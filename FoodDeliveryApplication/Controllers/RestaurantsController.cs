@@ -18,14 +18,16 @@ namespace FoodDeliveryApplication.Controllers
         private readonly ICategoryService _categoryService;
         private readonly IFoodCategoryService _foodCategoryService;
         private readonly CreateRestaurantHelper _createRestaurantHelper;
+        private readonly IsRestaurantAvailableHelper _isRestaurantAvailableHelper;
 
-        public RestaurantsController(UserManager<FoodDeliveryAppUser> userManager, IRestaurantService restaurantService, ICategoryService categoryService, IFoodCategoryService foodCategoryService, CreateRestaurantHelper createRestaurantHelper)
+        public RestaurantsController(UserManager<FoodDeliveryAppUser> userManager, IRestaurantService restaurantService, ICategoryService categoryService, IFoodCategoryService foodCategoryService, CreateRestaurantHelper createRestaurantHelper, IsRestaurantAvailableHelper isRestaurantAvailableHelper)
         {
             _userManager = userManager;
             _restaurantService = restaurantService;
             _categoryService = categoryService;
             _foodCategoryService = foodCategoryService;
             _createRestaurantHelper = createRestaurantHelper;
+            _isRestaurantAvailableHelper = isRestaurantAvailableHelper;
         }
 
         public async Task<IActionResult> Index()
@@ -59,11 +61,10 @@ namespace FoodDeliveryApplication.Controllers
 
             if (!RestaurantExists(restaurant.Id)) return NotFound();
 
-            var categories = _restaurantService.GetCategoriesForRestaurant(restaurant.Id);
-            var foodCategories = _foodCategoryService.GetAllFoodCategories();
+            restaurant.IsAvailable = _isRestaurantAvailableHelper.IsRestaurantAvailable(restaurant);
 
-            ViewBag.Categories = categories;
-            ViewBag.FoodCategories = foodCategories;
+            var isRestaurantFavorite = _restaurantService.IsRestaurantFavoriteForUser(User.FindFirstValue(ClaimTypes.NameIdentifier), restaurant.Id);
+            ViewBag.IsFavorite = isRestaurantFavorite;
 
             return View(restaurant);
         }

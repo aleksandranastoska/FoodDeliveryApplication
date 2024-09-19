@@ -1,0 +1,41 @@
+﻿@model FoodDelivery.Domain.DTO.OrderDTO
+
+<div class="container mt-5">
+    <h3>Order Details</h3>
+    <hr />
+    <div class="row">
+        @foreach (var item in Model.Order.FoodsInOrder)
+        {
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    <img class="card-img-top" src="@item.Food.Image" alt="Food image" style="height: 225px; width: 100%; display: block;">
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Food.Name</h5>
+                        <p><strong>Quantity:</strong> @item.Quantity</p>
+                        <p><strong>Price:</strong> @item.Price $</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <h4>Select Delivery Address</h4>
+    <div class="row">
+        @foreach (var address in Model.Addresses)
+        {
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">@address.Title</h5>
+                        <p>@address.Street, No: @address.Number, Flat: @address.Flat</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <form method="post" asp-controller="Orders" asp-action="ConfirmOrder">
+        <input type="hidden" name="orderId" value="@Model.Order.Id" />
+        <button type="submit" class="btn btn-success btn-lg mt-4">Confirm Order</button>
+    </form>
+</div>

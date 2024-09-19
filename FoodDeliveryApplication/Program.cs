@@ -7,6 +7,7 @@ using FoodDelivery.Service.Implementation;
 using FoodDelivery.Service.Interface;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,8 +31,11 @@ builder.Services.AddTransient<IRestaurantService, RestaurantService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
 builder.Services.AddTransient<IFoodCategoryService, FoodCategoryService>();
+builder.Services.AddTransient<IWishlistService, WishlistService>();
+builder.Services.AddTransient<IOrderService, OrderService>();
 
 builder.Services.AddScoped<CreateRestaurantHelper>();
+builder.Services.AddTransient<IsRestaurantAvailableHelper>();
 
 builder.Services.AddDefaultIdentity<FoodDeliveryAppUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>()
@@ -54,6 +58,14 @@ else
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).FullName, "FoodDelivery.Repository", "Images")),
+    RequestPath = "/Images"
+});
+
 
 app.UseRouting();
 

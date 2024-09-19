@@ -20,5 +20,7 @@ namespace FoodDelivery.Domain.Domain
         public string OwnerId { get; set; }
         public FoodDeliveryAppUser Owner { get; set; }
         public ICollection<Food> Menu { get; set; } = new List<Food>();
+        public string? RestaurantImage { get; set; }
+        public virtual ICollection<FavoriteRestaurants>? FavoriteRestaurants { get; set; }
     }
 }

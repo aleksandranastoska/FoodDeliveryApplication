@@ -45,7 +45,9 @@ namespace FoodDelivery.Repository.Implementation
 
         public IEnumerable<Restaurant> GetAllRestaurants()
         {
-            return entities.AsEnumerable();
+            return entities
+                .Include(r=>r.CategoryInRestaurants)
+                .AsEnumerable();
         }
 
         public IEnumerable<Category> GetCategoriesForRestaurant(Guid restaurantId)
@@ -76,6 +78,7 @@ namespace FoodDelivery.Repository.Implementation
         {
             return entities
                 .Include(r=>r.Owner)
+                .Include(r=>r.FavoriteRestaurants)
                 .Include(r=>r.Menu)
                 .ThenInclude(f => f.FoodCategory)
                 .SingleOrDefault(r => r.Id == id);
@@ -87,6 +90,7 @@ namespace FoodDelivery.Repository.Implementation
             entities.Add(restaurant);
             _context.SaveChanges();
         }
+
 
         public void Update(Restaurant restaurant)
         {

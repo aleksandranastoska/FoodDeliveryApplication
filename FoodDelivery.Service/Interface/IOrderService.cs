@@ -5,6 +5,9 @@ namespace FoodDelivery.Service.Interface
     public interface IOrderService
     {
         List<Order> GetAll();
-        Order GetDetailsForOrder(BaseEntity id);
+        Order GetDetailsForOrder(Guid? id);
+        void CreateNewOrder(Order o);
+        void UpdateExistingOrder(Order o);
+        void DeleteExistingOrder(Guid? id);
     }
 }

@@ -19,6 +19,7 @@
                 <input asp-for="@food.Name" placeholder="Food Name" />
                 <input asp-for="@food.Price" placeholder="Price" />
                 <input asp-for="@food.Description" placeholder="Description" />
+                <input asp-for="@food.Image" placeholder="Image" />
                 @Html.DropDownListFor(
                          x => @food.FoodCategoryId,
                          new SelectList(categories, "Id", "Name"),
@@ -26,6 +27,7 @@
                          new { @class = "form-control" }
                          )
                 <a class="deleteFoodButton" data-id="@food.Id" asp-action="Delete" asp-route-id="@food.Id" asp-controller="Foods">Delete</a>
+                <a class="editFoodButton" data-id="@food.Id" asp-action="Edit" asp-route-id="@food.Id" asp-controller="Foods">Edit</a>
             </div>
         }
     </div>
@@ -38,6 +40,7 @@
                 <input asp-for="@food.Name" placeholder="Food Name" />
                 <input asp-for="@food.Price" placeholder="Price" />
                 <input asp-for="@food.Description" placeholder="Description" />
+                <input asp-for="@food.Image" placeholder="Image" />
                 @Html.DropDownListFor(
                          x => @food.FoodCategoryId,
                          new SelectList(categories, "Id", "Name"),
@@ -62,6 +65,7 @@
                                         <input name="NewMenu[${newFoodIndex}].Name" placeholder="Food Name" />
                                         <input name="NewMenu[${newFoodIndex}].Price" placeholder="Price" />
                                         <input name="NewMenu[${newFoodIndex}].Description" placeholder="Description" />
+                                        <input name="NewMenu[${newFoodIndex}].Image" placeholder="Image" />
                                         <select name="NewMenu[${newFoodIndex}].FoodCategoryId">
         @foreach (var category in categories)
         {
@@ -71,14 +75,6 @@
                                        </div>`;
             container.insertAdjacentHTML('beforeend', newFoodItem);
             newFoodIndex++;
-        });
-
-        // Add delete functionality for existing menu items
-        document.querySelectorAll('.deleteFoodButton').forEach(button => {
-            button.addEventListener('click', function () {
-                const foodId = this.getAttribute('data-id');
-                // Handle deletion (could be through AJAX or a form post)
-            });
         });
     </script>
 }

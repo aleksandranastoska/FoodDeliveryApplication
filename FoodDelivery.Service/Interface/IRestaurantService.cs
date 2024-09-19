@@ -11,5 +11,6 @@ namespace FoodDelivery.Service.Interface
         void DeleteExistingRestaurant(Guid? id);
         List<Restaurant> GetAllRestaurantsFromOwner(string ownerId);
         List<Category> GetCategoriesForRestaurant(Guid restaurantId);
+        bool IsRestaurantFavoriteForUser(string userId, Guid restaurantId);
     }
 }

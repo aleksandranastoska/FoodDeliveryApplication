@@ -9,16 +9,35 @@ namespace FoodDelivery.Service.Implementation
     {
         private readonly IUserRepository _userRepository;
         private readonly IAddressRepository _addressRepository;
+        private readonly IRestaurantRepository _restaurantRepository;
 
-        public UserService(IUserRepository userRepository, IAddressRepository addressRepository)
+        public UserService(IUserRepository userRepository, IAddressRepository addressRepository, IRestaurantRepository restaurantRepository)
         {
             _userRepository = userRepository;
             _addressRepository = addressRepository;
+            _restaurantRepository = restaurantRepository;
         }
 
         public void AddAddress(Address address)
         {
             _addressRepository.Insert(address);
+        }
+
+        public async Task<bool> AddToFavorites(string userId, Guid restaurantId)
+        {
+            var restaurant = _restaurantRepository.GetRestaurantById(restaurantId);
+
+            var user = _userRepository.Get(userId);
+
+            user.FavoriteRestaurants.Add(new FavoriteRestaurants
+            {
+                Id = Guid.NewGuid(),
+                OwnerId = userId,
+                RestaurantId = restaurantId,
+                IsFavorite = true
+            });
+
+            return await Task.FromResult(true);
         }
 
         public List<Address> GetAllAddressesForUser(string? id)

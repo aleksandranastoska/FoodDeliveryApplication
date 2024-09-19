@@ -1,0 +1,80 @@
+﻿@using FoodDelivery.Domain.Domain
+@model FoodDelivery.Domain.Domain.Category
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+@{
+    var restaurants = ViewBag.Restaurants as List<Restaurant> ?? new List<Restaurant>();
+}
+
+@if (restaurants.Count == 0)
+{
+    <div class="alert alert-info" role="alert">
+        No restaurants available in this category.
+    </div>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Location</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>Rating</th>
+                <th>Available</th>
+                <th>Delivery Time</th>
+                <th>Working From</th>
+                <th>Working To</th>
+                <th>Phone Number</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in restaurants)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Location)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Latitude)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Longitude)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Rating)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsAvailable)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DeliveryTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.WorkingFrom)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.WorkingTo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PhoneNumber)
+                    </td>
+                    <td>
+                        <button class="btn btn-secondary">
+                            <a asp-controller="Restaurants" asp-action="Details" asp-route-id="@item.Id" class="text-white">Details</a>
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+

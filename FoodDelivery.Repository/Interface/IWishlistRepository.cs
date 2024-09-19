@@ -9,5 +9,6 @@ namespace FoodDelivery.Repository.Interface
         void Insert(Wishlist wishlist);
         void Update(Wishlist wishlist);
         void Delete(Wishlist wishlist);
+        Wishlist GetWishlistByUserId(string userId);
     }
 }

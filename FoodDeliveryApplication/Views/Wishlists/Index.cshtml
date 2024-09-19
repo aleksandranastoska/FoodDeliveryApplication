@@ -1,0 +1,69 @@
+﻿@model FoodDelivery.Domain.DTO.WishlistDTO
+
+@{
+    ViewData["Title"] = "My Wishlist";
+}
+
+
+<div class="row">
+    @foreach (var item in Model.Foods)
+    {
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm">
+                <img class="card-img-top" src="@item.Food.Image" alt="Food image" style="height: 225px; width: 100%; display: block;">
+                <div class="card-body">
+                    <h5 class="card-title">@item.Food.Name</h5>
+                    <p class="card-text">@item.Food.Description</p>
+                    <p><strong>Price:</strong> @item.Food.Price $</p>
+                    <p><strong>Quantity:</strong> @item.Quantity</p>
+
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <button class="btn btn-outline-secondary" type="button" onclick="decreaseQuantity('@item.FoodId', @item.Food.Price ?? 0)">-</button>
+                        </div>
+                        <input type="text" class="form-control text-center" value="@item.Quantity" id="quantity-@item.FoodId" readonly>
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button" onclick="increaseQuantity('@item.FoodId', @item.Food.Price ?? 0)">+</button>
+                        </div>
+                    </div>
+                    <div>
+                        <a asp-action="DeleteFromWishlist" asp-controller="Wishlists" asp-route-id="@item.Food.Id">Remove from Wishlist</a>
+                        </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="text-center">
+    <h3>Total Price: <span id="total-price">@Model.TotalPrice</span> $</h3>
+    <form method="post" asp-controller="Wishlists" asp-action="PlaceOrder">
+        <button type="submit" class="btn btn-success btn-lg mt-4">Order</button>
+    </form>
+</div>
+
+<script>
+    function decreaseQuantity(foodId, foodPrice) {
+        var quantityInput = document.getElementById('quantity-' + foodId);
+        if (quantityInput) {
+            var currentQuantity = parseInt(quantityInput.value);
+            if (currentQuantity > 1) {
+                quantityInput.value = currentQuantity - 1;
+                updateTotalPrice(foodId, foodPrice, currentQuantity - 1);
+            }
+        } else {
+            console.error('Quantity input element not found for ID:', foodId);
+        }
+    }
+
+    function increaseQuantity(foodId, foodPrice) {
+        var quantityInput = document.getElementById('quantity-' + foodId);
+        if (quantityInput) {
+            var currentQuantity = parseInt(quantityInput.value);
+            quantityInput.value = currentQuantity + 1;
+            updateTotalPrice(foodId, foodPrice, currentQuantity + 1);
+        } else {
+            console.error('Quantity input element not found for ID:', foodId);
+        }
+    }
+</script>

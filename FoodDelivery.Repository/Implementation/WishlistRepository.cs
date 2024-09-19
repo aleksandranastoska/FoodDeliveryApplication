@@ -24,12 +24,24 @@ namespace FoodDelivery.Repository.Implementation
 
         public IEnumerable<Wishlist> GetAllWishlists()
         {
-            return entities.AsEnumerable();
+            return entities
+                .Include(w=>w.FoodInWishlists)
+                .AsEnumerable();
         }
 
         public Wishlist GetWishlistById(Guid? id)
         {
-            return entities.SingleOrDefault(w => w.Id == id);
+            return entities
+                .Include(w => w.FoodInWishlists)
+                .SingleOrDefault(w => w.Id == id);
+        }
+
+        public Wishlist GetWishlistByUserId(string userId)
+        {
+            return entities
+                .Include(w => w.FoodInWishlists)
+                    .ThenInclude(fiw => fiw.Food) 
+                .SingleOrDefault(w => w.UserId == userId);
         }
 
         public void Insert(Wishlist wishlist)

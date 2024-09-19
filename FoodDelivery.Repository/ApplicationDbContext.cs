@@ -3,6 +3,7 @@ using FoodDelivery.Domain.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace FoodDelivery.Repository
 {
@@ -18,6 +19,7 @@ namespace FoodDelivery.Repository
         public DbSet<FoodInOrder> FoodInOrders { get; set; }
         public DbSet<FoodInWishlist> FoodInWishlists { get; set; }
         public DbSet<FoodCategory> FoodCategories { get; set; }
+        public DbSet<FavoriteRestaurants> FavoriteRestaurants { get; set; }
 
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
@@ -50,18 +52,18 @@ namespace FoodDelivery.Repository
         private void SeedCategories(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Category>().HasData(
-                new Category { Id = Guid.NewGuid(), Name = "Italian", Image = "italian.jpg" },
-                new Category { Id = Guid.NewGuid(), Name = "Chinese", Image = "chinese.jpg" },
-                new Category { Id = Guid.NewGuid(), Name = "Mexican", Image = "mexican.jpg" },
-                new Category { Id = Guid.NewGuid(), Name = "Indian", Image = "indian.jpg" },
-                new Category { Id = Guid.NewGuid(), Name = "American", Image = "american.jpg" },
-                new Category { Id = Guid.NewGuid(), Name = "Greek", Image = "greek.jpg" },
-                new Category { Id = Guid.NewGuid(), Name = "Vegan", Image = "vegan.jpg" },
-                new Category { Id = Guid.NewGuid(), Name = "Vegetarian", Image = "vegetarian.jpg" },
-                new Category { Id = Guid.NewGuid(), Name = "Healthy", Image = "healthy.jpg" },
-                new Category { Id = Guid.NewGuid(), Name = "Asian", Image = "asian.jpg" },
-                new Category { Id = Guid.NewGuid(), Name = "Breakfast", Image = "breakfast.jpg" },
-                new Category { Id = Guid.NewGuid(), Name = "Desserts", Image = "desserts.jpg" }
+                new Category { Id = Guid.NewGuid(), Name = "Italian", Image = "../Images/italian.png" },
+                new Category { Id = Guid.NewGuid(), Name = "Chinese", Image = "../Images/chinese.png" },
+                new Category { Id = Guid.NewGuid(), Name = "Mexican", Image = "../Images/mexican.png" },
+                new Category { Id = Guid.NewGuid(), Name = "Indian", Image = "../Images/indian.png" },
+                new Category { Id = Guid.NewGuid(), Name = "American", Image = "../Images/american.png" },
+                new Category { Id = Guid.NewGuid(), Name = "Greek", Image = "../Images/greek.jfif" },
+                new Category { Id = Guid.NewGuid(), Name = "Vegan", Image = "../Images/vegan.png" },
+                new Category { Id = Guid.NewGuid(), Name = "Vegetarian", Image = "../Images/vegetarian.png" },
+                new Category { Id = Guid.NewGuid(), Name = "Healthy", Image = "../Images/healthy.png" },
+                new Category { Id = Guid.NewGuid(), Name = "Asian", Image = "../Images/asian.png" },
+                new Category { Id = Guid.NewGuid(), Name = "Breakfast", Image = "../Images/breakfast.png" },
+                new Category { Id = Guid.NewGuid(), Name = "Desserts", Image = "../Images/desserts.png" }
             );
         }
 

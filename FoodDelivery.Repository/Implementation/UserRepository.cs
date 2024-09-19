@@ -1,4 +1,5 @@
-﻿using FoodDelivery.Domain.Identity;
+﻿using FoodDelivery.Domain.Domain;
+using FoodDelivery.Domain.Identity;
 using FoodDelivery.Repository.Interface;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,6 +13,7 @@ namespace FoodDelivery.Repository.Implementation
         public UserRepository(ApplicationDbContext context)
         {
             _context = context;
+            entities = context.Set<FoodDeliveryAppUser>();
         }
 
         public void Delete(FoodDeliveryAppUser user)
@@ -24,6 +26,7 @@ namespace FoodDelivery.Repository.Implementation
         public FoodDeliveryAppUser Get(string? id)
         {
             return entities
+                .Include(u=>u.FavoriteRestaurants)
                 .Include(u=>u.Wishlist)
                 .Include("Wishlist.FoodInWishlists")
                 .Include("Wishlist.FoodInWishlists.Food")
@@ -32,7 +35,9 @@ namespace FoodDelivery.Repository.Implementation
 
         public IEnumerable<FoodDeliveryAppUser> GetAll()
         {
-            return entities.AsEnumerable();
+            return entities
+                .Include(owner=>owner.FavoriteRestaurants)
+                .AsEnumerable();
         }
 
         public void Insert(FoodDeliveryAppUser user)

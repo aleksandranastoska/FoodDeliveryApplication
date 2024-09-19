@@ -1,8 +1,160 @@
-﻿@{
+﻿@using FoodDelivery.Domain.Domain
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@{
+    var categories = ViewBag.Categories as List<Category>;
+    var popularRestaurants = ViewBag.Restaurants as List<Restaurant>;
+}
+
+<section class="pt-5 homepage-search-block-white position-relative overflow-hidden">
+    <div class="banner-overlay"></div>
+    <div class="container">
+        <div class="row d-flex align-items-center">
+            <div class="col-md-8">
+                <div class="homepage-search-title">
+                    <div class="spacer"></div>
+                    <section class="cd-intro">
+                        <h1 class="cd-headline rotate-1">
+                            <span>Order</span>
+                            <span class="cd-words-wrapper" style="width: 180px;"></span>
+                        </h1>
+                        <h5 class="mb-5 text-gray pl-1 mt-4">Quick delivery</h5>
+                    </section>
+                </div>
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+    </div>
+</section>
+<section class="section pt-4 categories-section">
+    <div class="container">
+        <div class="section-header ml-2">
+            <h2>Popular categories</h2>
+        </div>
+        @for (int i = 0; i < categories.Count; i++)
+        {
+            var category = categories[i];
+            if (i % 6 == 0)
+            {
+                @:<div class="row">
+            }
+
+            <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+                <a asp-controller="Categories" asp-action="Details" asp-route-id="@category.Id" class="text-decoration-none">
+                    <div class="card" style="width: 100%; height: 12rem;">
+                        <img class="card-img-top" src="@category.Image" alt="@category.Name" style="height: 7rem; object-fit: cover;">
+                        <div class="card-body text-center">
+                            <h6 class="card-title">@category.Name</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            @if (i % 6 == 5 || i == categories.Count - 1)
+            {
+                @:</div>
+            }
+        }
+    </div>
+</section>
+
+
+<section class="owl-prevnext section products-section bg-white bordermob">
+    <div class="tab-pane fade show" role="tabpanel" aria-labelledby="tabs">
+        <section class="owl-prevnext section products-section bg-white bordermob">
+            <div class="container">
+                <div class="customNavigation">
+                    <a class="btn prev">
+                        <i class="fa fa-angle-left">::before</i>
+                    </a>
+                    <a class="btn next">
+                        <i class="fa fa-angle-right">::before</i>
+                    </a>
+                </div>
+                <div class="section-header ml-2">
+                    <h2>Popular restaurants</h2>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="owl-carousel owl-carousel-four owl-theme owl-loaded owl-drag">
+                            <div class="owl-stage-outer">
+                                <div class="owl-stage" style="transform: translate3d(-2337px, 0px, 0px); transition: all; width: 8880px;">
+                                    @foreach(var restaurant in popularRestaurants)
+                                    {
+                                        <div class="owl-item cloned" style="width: 500px;">
+                                            <div class="item">
+                                                <div class="list-card bg-white h-100 rounded overflow-hidden position-relative shadow-sm">
+                                                    <div class="list-card-image">
+                                                        <a href="#">
+                                                            <img src="" alt="..."/>
+                                                        </a>
+                                                    </div>
+                                                    <div class="p-3 position-relative">
+                                                        <div class="list-card-body">
+                                                            <h6 class="mb-1">
+                                                                <a href="#" class="text-black">@restaurant.Name</a>
+                                                            </h6>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="owl-prevnext section products-section bg-white bordermob"></section>
+    </div>
+</section>
+
+<style>
+    .owl-carousel .item {
+        width: 100%; 
+    }
+
+        .owl-carousel .item h1 {
+            text-align: center; 
+        }
+
+    .osahan-category-item {
+        padding: 10px; 
+    }
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="jquery.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js" integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.js" integrity="sha512-gY25nC63ddE0LcLPhxUJGFxa2GoIyA5FLym4UJqHDEMHjp8RET6Zn/SHo1sltt3WuVtqfyxECP38/daUc/WVEA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+<script>
+    $(document).ready(function () {
+        $('.owl-carousel-category').owlCarousel({
+            loop: true,
+            margin: 10,
+            nav: true,
+            dots: false,
+            responsive: {
+                0: {
+                    items: 1
+                },
+                600: {
+                    items: 3
+                },
+                1000: {
+                    items: 5
+                }
+            }
+        });
+    });
+    $(document).ready(function () {
+        $('.owl-carousel').owlCarousel();
+    });
+</script>

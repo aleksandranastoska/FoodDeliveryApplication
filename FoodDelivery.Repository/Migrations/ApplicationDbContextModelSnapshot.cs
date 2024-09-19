@@ -17,7 +17,7 @@ namespace FoodDelivery.Repository.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.7")
+                .HasAnnotation("ProductVersion", "8.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -72,74 +72,74 @@ namespace FoodDelivery.Repository.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("1ed54c17-242a-422a-8dec-d9b4e2458e44"),
-                            Image = "italian.jpg",
+                            Id = new Guid("e4a58d3d-bd7e-4586-bd67-448b450308fb"),
+                            Image = "../Images/italian.png",
                             Name = "Italian"
                         },
                         new
                         {
-                            Id = new Guid("d2c585ea-6e80-4abf-91c9-0e83baea2d8a"),
-                            Image = "chinese.jpg",
+                            Id = new Guid("7621333a-3bc2-4d1a-b8ec-e883313c5742"),
+                            Image = "../Images/chinese.png",
                             Name = "Chinese"
                         },
                         new
                         {
-                            Id = new Guid("0e78a8ba-3ece-4c8a-9aac-4b89a627b387"),
-                            Image = "mexican.jpg",
+                            Id = new Guid("b5074f24-fb2a-493a-a34e-aa4a1b987074"),
+                            Image = "../Images/mexican.png",
                             Name = "Mexican"
                         },
                         new
                         {
-                            Id = new Guid("251fc0db-938c-4313-bcf9-ce6fa53c6217"),
-                            Image = "indian.jpg",
+                            Id = new Guid("5e414e8c-e3b7-42b0-a59e-a81ca4e3127b"),
+                            Image = "../Images/indian.png",
                             Name = "Indian"
                         },
                         new
                         {
-                            Id = new Guid("52fecafd-0337-48a7-acb1-235ced024aca"),
-                            Image = "american.jpg",
+                            Id = new Guid("ce5fb02c-1aa4-4b5f-9e7e-aa48a7336515"),
+                            Image = "../Images/american.png",
                             Name = "American"
                         },
                         new
                         {
-                            Id = new Guid("d54d69ec-a01a-40df-bad4-0cd5547fc634"),
-                            Image = "greek.jpg",
+                            Id = new Guid("a164d43f-1df5-4fbe-adc6-7134a97e22f2"),
+                            Image = "../Images/greek.jfif",
                             Name = "Greek"
                         },
                         new
                         {
-                            Id = new Guid("dba2474f-c42b-4eac-9c07-2f14e0728fe7"),
-                            Image = "vegan.jpg",
+                            Id = new Guid("310b214d-82bd-4943-9525-17788c7ccfec"),
+                            Image = "../Images/vegan.png",
                             Name = "Vegan"
                         },
                         new
                         {
-                            Id = new Guid("60705633-8f10-4892-a2ec-efdbe14cd0ec"),
-                            Image = "vegetarian.jpg",
+                            Id = new Guid("bc033c9a-f8bc-46b3-a4ed-eed20b83cff9"),
+                            Image = "../Images/vegetarian.png",
                             Name = "Vegetarian"
                         },
                         new
                         {
-                            Id = new Guid("a4badf53-5d2e-4f69-a997-558bd938db45"),
-                            Image = "healthy.jpg",
+                            Id = new Guid("a7cd10c1-4ec4-4fe8-9673-90416736bd2b"),
+                            Image = "../Images/healthy.png",
                             Name = "Healthy"
                         },
                         new
                         {
-                            Id = new Guid("6cf72789-a673-45b0-a102-9f099d7c2b97"),
-                            Image = "asian.jpg",
+                            Id = new Guid("1e62d490-81d3-4cf1-827a-4d0a64d46212"),
+                            Image = "../Images/asian.png",
                             Name = "Asian"
                         },
                         new
                         {
-                            Id = new Guid("1ff749fc-84de-4e17-a5f2-50729b01d477"),
-                            Image = "breakfast.jpg",
+                            Id = new Guid("84886685-38dc-4d64-b992-37e7947e8600"),
+                            Image = "../Images/breakfast.png",
                             Name = "Breakfast"
                         },
                         new
                         {
-                            Id = new Guid("d651ab1b-cef2-4db0-94e5-e0303b2fda20"),
-                            Image = "desserts.jpg",
+                            Id = new Guid("8baec1ab-6bc4-400c-b1b8-f90bc0957884"),
+                            Image = "../Images/desserts.png",
                             Name = "Desserts"
                         });
                 });
@@ -163,6 +163,31 @@ namespace FoodDelivery.Repository.Migrations
                     b.HasIndex("RestaurantId");
 
                     b.ToTable("CategoryInRestaurants");
+                });
+
+            modelBuilder.Entity("FoodDelivery.Domain.Domain.FavoriteRestaurants", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsFavorite")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("OwnerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<Guid>("RestaurantId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OwnerId");
+
+                    b.HasIndex("RestaurantId");
+
+                    b.ToTable("FavoriteRestaurants");
                 });
 
             modelBuilder.Entity("FoodDelivery.Domain.Domain.Food", b =>
@@ -214,77 +239,77 @@ namespace FoodDelivery.Repository.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("58518393-014d-4cdc-a7c7-3a1da775a992"),
+                            Id = new Guid("a1e861b7-86a6-4f5f-81f1-612488b0fdb5"),
                             Name = "Breakfast"
                         },
                         new
                         {
-                            Id = new Guid("02a21863-600a-4289-b850-abfdefa2d151"),
+                            Id = new Guid("5ec1053c-50b4-4546-b1d4-f0d77d598c08"),
                             Name = "Salads"
                         },
                         new
                         {
-                            Id = new Guid("fd06fc83-9fa8-4298-b098-92058bd1cbaa"),
+                            Id = new Guid("c6db7bd5-0b25-44b5-9e58-6ae3fbbb26e6"),
                             Name = "Pasta"
                         },
                         new
                         {
-                            Id = new Guid("ab48720a-5cc1-4586-8774-cf848f3df1f3"),
+                            Id = new Guid("a7102bd8-f75e-4a76-a1be-8e922a7f9e8a"),
                             Name = "Pizza"
                         },
                         new
                         {
-                            Id = new Guid("e9326043-cfd6-4cbf-b5dd-5f6f887df569"),
+                            Id = new Guid("4283d0f6-02b7-4926-b5b0-7226ab5c4841"),
                             Name = "Desserts"
                         },
                         new
                         {
-                            Id = new Guid("cb0b21f3-51e8-4f80-91e9-b36f3c8dde72"),
+                            Id = new Guid("95dd8dac-5ce0-4814-80bb-f133b64eb7d0"),
                             Name = "Alcoholic Beverages"
                         },
                         new
                         {
-                            Id = new Guid("630fc521-5b63-4cd4-99b8-9eea377542c2"),
+                            Id = new Guid("f1938b19-cc95-492f-8b83-a81213407b2b"),
                             Name = "Soft Drinks"
                         },
                         new
                         {
-                            Id = new Guid("52e71a8c-5aa8-4bad-b18d-d888fa0026d4"),
+                            Id = new Guid("32cf1593-e114-4bc5-8b8c-db0c7ee54df0"),
                             Name = "Hot Drinks"
                         },
                         new
                         {
-                            Id = new Guid("2168a8a4-34f8-49b4-bdf3-71b4764a7f33"),
+                            Id = new Guid("140603b7-3f87-48cb-b193-0a29be192313"),
                             Name = "Coffee"
                         },
                         new
                         {
-                            Id = new Guid("1232522d-628e-4a62-a9d6-d70a16cc0975"),
+                            Id = new Guid("d431eeea-ef68-49f6-b1d6-33c9c74bff75"),
                             Name = "Main Course"
                         },
                         new
                         {
-                            Id = new Guid("6a871b3d-484a-4304-b95b-d3c5715a3ee1"),
+                            Id = new Guid("bfc68038-b613-4479-8991-b033a4d4d6a9"),
                             Name = "Starters"
                         },
                         new
                         {
-                            Id = new Guid("d5ff2a03-e375-4c33-bb02-15452073faa9"),
+                            Id = new Guid("d3ac0d97-c4c4-4543-8fc0-7c34227fe608"),
                             Name = "Brunch"
                         },
                         new
                         {
-                            Id = new Guid("af833888-1ba5-49f5-b2b9-49f6f3a7ffcb"),
+                            Id = new Guid("0bac2a2d-7581-4803-9bc9-f165a92de540"),
                             Name = "Burgers"
                         },
                         new
                         {
-                            Id = new Guid("391afc2a-3bd8-4c96-b8e5-911cebd49f09"),
+                            Id = new Guid("cc6fc09e-7961-4960-b00b-a5071477ca7d"),
                             Name = "Sandwiches"
                         },
                         new
                         {
-                            Id = new Guid("3ceb2b3a-1e4f-48a1-b064-d4660b0d6741"),
+                            Id = new Guid("5a737934-93e7-410b-b44d-17c761631dbc"),
                             Name = "Juices"
                         });
                 });
@@ -349,6 +374,9 @@ namespace FoodDelivery.Repository.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("AddressId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("OwnerId")
                         .HasColumnType("nvarchar(450)");
 
@@ -357,6 +385,8 @@ namespace FoodDelivery.Repository.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AddressId");
 
                     b.HasIndex("OwnerId");
 
@@ -399,6 +429,9 @@ namespace FoodDelivery.Repository.Migrations
 
                     b.Property<double?>("Rating")
                         .HasColumnType("float");
+
+                    b.Property<string>("RestaurantImage")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("TotalGrades")
                         .HasColumnType("int");
@@ -676,6 +709,25 @@ namespace FoodDelivery.Repository.Migrations
                     b.Navigation("Restaurant");
                 });
 
+            modelBuilder.Entity("FoodDelivery.Domain.Domain.FavoriteRestaurants", b =>
+                {
+                    b.HasOne("FoodDelivery.Domain.Identity.FoodDeliveryAppUser", "Owner")
+                        .WithMany("FavoriteRestaurants")
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FoodDelivery.Domain.Domain.Restaurant", "Restaurant")
+                        .WithMany("FavoriteRestaurants")
+                        .HasForeignKey("RestaurantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+
+                    b.Navigation("Restaurant");
+                });
+
             modelBuilder.Entity("FoodDelivery.Domain.Domain.Food", b =>
                 {
                     b.HasOne("FoodDelivery.Domain.Domain.FoodCategory", "FoodCategory")
@@ -731,9 +783,15 @@ namespace FoodDelivery.Repository.Migrations
 
             modelBuilder.Entity("FoodDelivery.Domain.Domain.Order", b =>
                 {
+                    b.HasOne("FoodDelivery.Domain.Domain.Address", "Address")
+                        .WithMany()
+                        .HasForeignKey("AddressId");
+
                     b.HasOne("FoodDelivery.Domain.Identity.FoodDeliveryAppUser", "Owner")
                         .WithMany("Orders")
                         .HasForeignKey("OwnerId");
+
+                    b.Navigation("Address");
 
                     b.Navigation("Owner");
                 });
@@ -823,6 +881,8 @@ namespace FoodDelivery.Repository.Migrations
                 {
                     b.Navigation("CategoryInRestaurants");
 
+                    b.Navigation("FavoriteRestaurants");
+
                     b.Navigation("Menu");
                 });
 
@@ -834,6 +894,8 @@ namespace FoodDelivery.Repository.Migrations
             modelBuilder.Entity("FoodDelivery.Domain.Identity.FoodDeliveryAppUser", b =>
                 {
                     b.Navigation("DeliveryAddress");
+
+                    b.Navigation("FavoriteRestaurants");
 
                     b.Navigation("Orders");
 

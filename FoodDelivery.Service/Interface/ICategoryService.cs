@@ -6,5 +6,6 @@ namespace FoodDelivery.Service.Interface
     {
         List<Category> GetAllCategories();
         Category GetDetailsForCategory(Guid? id);
+        List<Restaurant> GetAllRestaurants(Guid? id);
     }
 }

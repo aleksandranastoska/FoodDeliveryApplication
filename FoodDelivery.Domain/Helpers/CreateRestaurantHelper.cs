@@ -32,7 +32,8 @@ namespace FoodDelivery.Domain.Helpers
                WorkingTo = restaurantDTO.WorkingTo,
                PhoneNumber = restaurantDTO.PhoneNumber,
                OwnerId = loggedInUser,
-               Owner = await _userManager.FindByIdAsync(loggedInUser)
+               Owner = await _userManager.FindByIdAsync(loggedInUser),
+               RestaurantImage = restaurantDTO.RestaurantImage
            };
         }
 
@@ -55,7 +56,8 @@ namespace FoodDelivery.Domain.Helpers
                 PhoneNumber = restaurant.PhoneNumber,
                 OwnerId = restaurant.OwnerId,
                 Owner = restaurant.Owner,
-                Menu = restaurant.Menu
+                Menu = restaurant.Menu,
+                RestaurantImage = restaurant.RestaurantImage
             };
         }
     }

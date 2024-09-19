@@ -16,6 +16,13 @@ namespace FoodDelivery.Repository.Implementation
             entities = context.Set<Order>();
         }
 
+        public void Delete(Order order)
+        {
+            CheckIfEntityIsNull(order);
+            entities.Remove(order);
+            _context.SaveChanges();
+        }
+
         public List<Order> GetAll()
         {
             return entities
@@ -34,9 +41,27 @@ namespace FoodDelivery.Repository.Implementation
                 .SingleOrDefaultAsync(z => z.Id == id.Id).Result;
         }
 
+        public Order GetDetailsForOrder(Guid? id)
+        {
+            return entities
+                .Include(o => o.FoodsInOrder)
+                .Include(o => o.Owner)
+                .Include("FoodsInOrder.Food")
+                .SingleOrDefaultAsync(z => z.Id == id).Result;
+        }
+
         public void Insert(Order order)
         {
             CheckIfEntityIsNull(order);
+            entities.Add(order);
+            _context.SaveChanges();
+        }
+
+        public void Update(Order order)
+        {
+            CheckIfEntityIsNull(order);
+            entities.Update(order);
+            _context.SaveChanges();
         }
 
         private void CheckIfEntityIsNull(Order entity)
