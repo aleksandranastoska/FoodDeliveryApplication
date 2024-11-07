@@ -57,7 +57,8 @@ namespace FoodDelivery.Domain.Helpers
                 OwnerId = restaurant.OwnerId,
                 Owner = restaurant.Owner,
                 Menu = restaurant.Menu,
-                RestaurantImage = restaurant.RestaurantImage
+                RestaurantImage = restaurant.RestaurantImage,
+                CategoryInRestaurants = restaurant.CategoryInRestaurants
             };
         }
     }

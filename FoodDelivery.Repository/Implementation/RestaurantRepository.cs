@@ -47,7 +47,28 @@ namespace FoodDelivery.Repository.Implementation
         {
             return entities
                 .Include(r=>r.CategoryInRestaurants)
+                .Include(r=>r.Menu)
                 .AsEnumerable();
+        }
+
+        public List<Restaurant> GetAllRestaurants(Guid? categoryId)
+        {
+            return entities
+                .Include(r => r.CategoryInRestaurants)
+                .Where(r => r.CategoryInRestaurants
+                    .Any(cir => cir.CategoryId == categoryId))
+                .Include(r => r.Menu) 
+                .ToList();
+        }
+
+        public IEnumerable<Restaurant> GetAllRestaurantsInCategory(Guid? categoryId)
+        {
+            return entities
+        .Include(r => r.CategoryInRestaurants)
+        .Where(r => r.CategoryInRestaurants
+            .Any(cir => cir.CategoryId == categoryId))
+        .Include(r=>r.Menu)
+        .ToList();
         }
 
         public IEnumerable<Category> GetCategoriesForRestaurant(Guid restaurantId)
@@ -81,6 +102,7 @@ namespace FoodDelivery.Repository.Implementation
                 .Include(r=>r.FavoriteRestaurants)
                 .Include(r=>r.Menu)
                 .ThenInclude(f => f.FoodCategory)
+                .Include(r=>r.CategoryInRestaurants)
                 .SingleOrDefault(r => r.Id == id);
         }
 

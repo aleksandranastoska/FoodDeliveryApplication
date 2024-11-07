@@ -22,10 +22,7 @@ namespace FoodDelivery.Service.Implementation
 
         public List<Restaurant> GetAllRestaurants(Guid? id)
         {
-            return _restaurantRepository.GetAllRestaurants()
-                .Where(r => r.CategoryInRestaurants
-                    .Any(cir => cir.CategoryId == id))
-                .ToList();
+            return _restaurantRepository.GetAllRestaurantsInCategory(id).ToList();
         }
 
         public Category GetDetailsForCategory(Guid? id)

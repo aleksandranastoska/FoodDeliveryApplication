@@ -23,6 +23,7 @@ namespace FoodDelivery.Repository.Implementation
         public Category GetCategoryById(Guid? id)
         {
             return entities
+                .Include(c=>c.CategoryInRestaurants)
                 .SingleOrDefault(c => c.Id == id);
         }
     }
