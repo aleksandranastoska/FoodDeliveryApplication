@@ -2,98 +2,112 @@
 
 @{
     ViewData["Title"] = "Index";
-}
-
-@{
     var restaurants = ViewBag.Restaurants as List<Restaurant>;
 }
 
-<p>
-    <a asp-action="Create">Add New Restaurant</a>
-</p>
+<div class="container my-5">
+    <div class="text-center mb-4">
+        <h1 style="color: #89A8B2;">My Restaurants</h1>
+    </div>
 
-@if (restaurants.Count == 0)
-{
-        <p>No restaurants found</p>
-}
-else{
-    <p>Restaurants you own:</p>
+    <div class="text-end mb-3">
+        <a asp-action="Create" class="btn" style="background-color: #89A8B2; color: #F1F0E8;">Add New Restaurant</a>
+    </div>
 
+    @if (restaurants == null || restaurants.Count == 0)
+    {
+        <div class="alert alert-info text-center" style="background-color: #E5E1DA; color: #89A8B2;">
+            No restaurants found.
+        </div>
+    }
+    else
+    {
+        <p class="text-muted">Restaurants you own:</p>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Name
-            </th>
-            <th>
-                Location
-            </th>
-            <th>
-                Latitude)
-            </th>
-            <th>
-                Longitude
-            </th>
-            <th>
-                Rating
-            </th>
-            <th>
-                IsAvailable
-            </th>
-            <th>
-                DeliveryTime
-            </th>
-            <th>
-                WorkingFrom
-            </th>
-            <th>
-                WorkingTo
-            </th>
-            <th>
-                PhoneNumber
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in restaurants) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Location)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Latitude)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Longitude)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Rating)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsAvailable)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DeliveryTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.WorkingFrom)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.WorkingTo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PhoneNumber)
-            </td>
-                    <td>
-                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-secondary">Details</a>
-                    </td>
-        </tr>
-}
-    </tbody>
-</table>
-}
+        <table class="table table-striped shadow-sm" style="background-color: #F1F0E8; border: 1px solid #B3C8CF;">
+            <thead class="table-dark" style="background-color: #B3C8CF; color: #F1F0E8;">
+                <tr>
+                    <th>Name</th>
+                    <th>Location</th>
+                    <th>Latitude</th>
+                    <th>Longitude</th>
+                    <th>Rating</th>
+                    <th>Available</th>
+                    <th>Delivery Time</th>
+                    <th>Working From</th>
+                    <th>Working To</th>
+                    <th>Phone Number</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in restaurants)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Location)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Latitude)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Longitude)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Rating)</td>
+                        <td>
+                            @if (item.IsAvailable.Value)
+                            {
+                                <span class="badge bg-success">Yes</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">No</span>
+                            }
+                        </td>
+                        <td>@Html.DisplayFor(modelItem => item.DeliveryTime)</td>
+                        <td>@Html.DisplayFor(modelItem => item.WorkingFrom)</td>
+                        <td>@Html.DisplayFor(modelItem => item.WorkingTo)</td>
+                        <td>@Html.DisplayFor(modelItem => item.PhoneNumber)</td>
+                        <td>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm" style="background-color: #89A8B2; color: #F1F0E8;">Details</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .table {
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+        .table th, .table td {
+            vertical-align: middle;
+            text-align: center;
+        }
+
+    .btn {
+        border: none;
+        font-size: 0.9rem;
+    }
+
+        .btn:hover {
+            background-color: #B3C8CF !important;
+            color: #F1F0E8 !important;
+        }
+
+    .badge {
+        font-size: 0.8rem;
+        padding: 5px 10px;
+    }
+
+        .badge.bg-success {
+            background-color: #89A8B2 !important;
+        }
+
+        .badge.bg-danger {
+            background-color: #B3C8CF !important;
+        }
+</style>

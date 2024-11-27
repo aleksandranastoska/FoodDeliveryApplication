@@ -4,129 +4,212 @@
 @{
     var isFavorite = ViewBag.IsFavorite as bool?;
     var isFavoriteValue = isFavorite ?? false;
-}
-
-@{
     ViewData["Title"] = "Details";
 }
 
-<div class="container">
-    <div class="container">
-        <div class="container">
-            <div class="row d-flex align-items-md-end">
-                <div class="col-md-8">
-                    <div class="container">
-                        <h1 class="text-black">@Model.Name</h1>
-                    
-                    <div>
-                        <p>@Model.IsAvailable.Value</p>
-                    </div>
-                    <a class="text-black mb-1 mt-1 fs-20">
-                        @Model.Location
-                    </a>
-                </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="text-right">
-                        <button class="btn btn-warning m-lg-2 plxs-0" type="button">@Model.DeliveryTime</button>
-                        <button class="btn btn-warning m-lg-2 plxs-0" type="button">@Model.Rating</button>
-                        <a id="favorite-button"
-                           data-restaurant-id="@Model.Id"
-                           class="btn @(isFavoriteValue ? "btn-success" : "btn-warning") ml-2"
-                           href="javascript:void(0);">
-                            @(isFavoriteValue ? "Favorite" : "Add to Favorites")
-                        </a>
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
 
-                        <button class="btn btn-warning text-white m-lg-2">Info</button>
-                    </div>
-                </div>
-            </div>
+    h1 {
+        color: #89A8B2;
+        font-weight: bold;
+    }
+
+    p {
+        font-size: 1rem;
+        color: #333;
+    }
+
+    hr {
+        border-color: #B3C8CF;
+    }
+
+    .btn-outline-primary {
+        border-color: #89A8B2;
+        color: #89A8B2;
+    }
+
+        .btn-outline-primary:hover {
+            background-color: #B3C8CF;
+            color: #F1F0E8;
+        }
+
+    .btn-success {
+        background-color: #89A8B2;
+        color: #F1F0E8;
+        border: none;
+    }
+
+        .btn-success:hover {
+            background-color: #B3C8CF;
+            color: #F1F0E8;
+        }
+
+    .btn-warning {
+        background-color: #E5E1DA;
+        color: #333;
+    }
+
+        .btn-warning:hover {
+            background-color: #B3C8CF;
+            color: #F1F0E8;
+        }
+
+    .card {
+        border: 1px solid #B3C8CF;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    .card-img-top {
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .card-title {
+        color: #89A8B2;
+        font-weight: bold;
+    }
+
+    .card-text {
+        font-size: 0.9rem;
+        color: #6c757d;
+    }
+
+    .text-success {
+        color: #89A8B2 !important;
+    }
+
+    .btn-outline-danger {
+        border-color: #E5E1DA;
+        color: #E5E1DA;
+    }
+
+        .btn-outline-danger:hover {
+            background-color: #B3C8CF;
+            color: #F1F0E8;
+        }
+
+    .btn-outline-success {
+        border-color: #B3C8CF;
+        color: #B3C8CF;
+    }
+
+        .btn-outline-success:hover {
+            background-color: #89A8B2;
+            color: #F1F0E8;
+        }
+
+    /* Section Header */
+    h4 {
+        color: #89A8B2;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+</style>
+
+<div class="container my-5">
+    <div class="row align-items-center">
+        <div class="col-md-8">
+            <h1>@Model.Name</h1>
+            <p><strong>Location:</strong> @Model.Location</p>
+            <p><strong>Available:</strong> @(Model.IsAvailable.Value ? "Yes" : "No")</p>
+        </div>
+        <div class="col-md-4 text-end">
+            <button class="btn btn-outline-primary mb-2" type="button">
+                Delivery Time: @Model.DeliveryTime
+            </button>
+            <button class="btn btn-outline-primary mb-2" type="button">
+                Rating: @Model.Rating
+            </button>
+            <a id="favorite-button"
+               data-restaurant-id="@Model.Id"
+               class="btn @(isFavoriteValue ? "btn-info" : "btn-warning") mb-2"
+               href="javascript:void(0);">
+                @(isFavoriteValue ? "Favorited" : "Add to Favorites")
+            </a>
         </div>
     </div>
-</div>
 
+    <hr />
 
+    @if (ViewBag.IsOwner != null && (bool)ViewBag.IsOwner)
+    {
+        <div class="mb-4">
+            <a class="btn btn-secondary me-2" asp-controller="Restaurants" asp-action="CreateMenu" asp-route-id="@Model.Id">Create Menu</a>
+            <a class="btn btn-secondary" asp-controller="Restaurants" asp-action="Edit" asp-route-id="@Model.Id">Edit Details</a>
+        </div>
+    }
 
-<section>
-    <div class="container">
-        <p class="text-black">@Model.Menu.Count</p>
-    </div>
-</section>
-
-@if (@Model.Owner.Role == FoodDelivery.Domain.Enumerations.UserRole.OWNER)
-{
-    <li class="nav-item">
-        <a class="nav-link" asp-controller="Restaurants" asp-action="CreateMenu" asp-route-id="@Model.Id">Create Menu</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" asp-controller="Restaurants" asp-action="Edit" asp-route-id="@Model.Id">Edit Details</a>
-    </li>
-}
-
-<section>
-    <div class="container">
+    <section>
         <h4>Menu</h4>
-        <hr />
-        @if (Model.Menu != null && Model.Menu.Any())
-        {
-            var groupedMenu = Model.Menu.GroupBy(m => m.FoodCategory.Name);
-
-            @foreach (var group in groupedMenu)
+        <div class="row">
+            @if (Model.Menu != null && Model.Menu.Any())
             {
-                <h5>@group.Key</h5>
-                <ul class="list-group">
+                var groupedMenu = Model.Menu.GroupBy(m => m.FoodCategory.Name);
+                @foreach (var group in groupedMenu)
+                {
+                    <div class="col-12">
+                        <h5 class="mt-3">@group.Key</h5>
+                        <hr />
+                    </div>
+
                     @foreach (var item in group)
                     {
-                        <div class="card" style="width: 18rem; height: 35rem">
-                            <img class="card-img-top" src="@item.Image" alt="Card image cap">
-                            <div class="card-body">
-                                <h5 class="card-title">@item.Name</h5>
-                                <p class="card-text">@item.Description</p>
-                                <h6>Price: @item.Price</h6>
+                        <div class="col-md-4 mb-4">
+                            <div class="card">
+                                <img class="card-img-top" src="@item.Image" alt="@item.Name" />
+                                <div class="card-body">
+                                    <h5 class="card-title">@item.Name</h5>
+                                    <p class="card-text">@item.Description</p>
+                                    <h6 class="text-success">Price: @item.Price</h6>
+                                    @if (ViewBag.IsRegularUser != null && (bool)ViewBag.IsRegularUser)
+                                    {
+                                    <div class="input-group my-3">
+                                        <button class="btn btn-outline-danger" type="button" onclick="decreaseQuantity('@item.Id', @item.Price)">-</button>
+                                        <input type="text" class="form-control text-center" value="1" id="quantity-@item.Id" readonly />
+                                        <button class="btn btn-outline-success" type="button" onclick="increaseQuantity('@item.Id', @item.Price)">+</button>
+                                    </div>
+                                    
+                                        <form method="post" asp-controller="Foods" asp-action="AddToWishlist" asp-route-id="@item.Id">
+                                            <input type="hidden" name="quantity" id="hidden-quantity-@item.Id" value="1" />
 
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <button class="btn btn-outline-secondary" type="button" onclick="decreaseQuantity('@item.Id', @item.Price)">-</button>
-                                    </div>
-                                    <input type="text" class="form-control text-center" value="1" id="quantity-@item.Id" readonly>
-                                    <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary" type="button" onclick="increaseQuantity('@item.Id', @item.Price)">+</button>
-                                    </div>
+                                            <button type="submit" class="btn btn-info w-100" style="background-color: #B3C8CF !important;">Add to Wishlist</button>
+
+                                        </form>
+                                    }
                                 </div>
                             </div>
-                            <div class="card-footer">
-                                <form method="post" asp-controller="Foods" asp-action="AddToWishlist" asp-route-id="@item.Id">
-                                    <input type="hidden" name="quantity" id="hidden-quantity-@item.Id" value="1" />
-                                    <button type="submit" class="btn btn-info">Add to Wishlist</button>
-                                </form>
-                            </div>
-
                         </div>
                     }
-                </ul>
+                }
             }
-        }
-        else
-        {
-            <p>No items in the menu.</p>
-        }
-    </div>
-</section>
+            else
+            {
+                <div class="col-12">
+                    <p>No items in the menu.</p>
+                </div>
+            }
+        </div>
+    </section>
 
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <div class="mt-4">
+        <a class="btn btn-secondary me-2" asp-action="Edit" asp-route-id="@Model?.Id">Edit</a>
+        <a class="btn btn-secondary" asp-action="Index">Back to List</a>
+    </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function () {
         $('#favorite-button').click(function (event) {
-            event.preventDefault(); 
+            event.preventDefault();
 
             var restaurantId = $(this).data('restaurant-id');
-            var token = $('input[name="__RequestVerificationToken"]').val();  
+            var token = $('input[name="__RequestVerificationToken"]').val();
 
             $.ajax({
                 url: '@Url.Action("AddToFavorites", "Profile")',
@@ -136,31 +219,10 @@
                     __RequestVerificationToken: token
                 },
                 success: function () {
-                    $('#favorite-button').text('Favorited').removeClass('btn-warning').addClass('btn-success');
+                    $('#favorite-button').text('Favorited').removeClass('btn-warning').addClass('btn-transparent');
                 },
                 error: function () {
                     alert('Failed to add to favorites');
-                }
-            });
-        });
-        $('.add-to-wishlist').click(function (event) {
-            event.preventDefault(); 
-
-            var foodId = $(this).data('food-id');
-            var button = $(this);
-            var token = $('input[name="__RequestVerificationToken"]').val();
-
-            $.ajax({
-                url: '/Foods/AddToWishlist/' + foodId,  
-                type: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': token
-                },
-                success: function () {
-                    button.text('Added to Wishlist').removeClass('btn-info').addClass('btn-success');
-                },
-                error: function () {
-                    alert('Failed to add to wishlist');
                 }
             });
         });
@@ -169,14 +231,9 @@
     function decreaseQuantity(foodId, foodPrice) {
         var quantityInput = document.getElementById('quantity-' + foodId);
         var hiddenQuantityInput = document.getElementById('hidden-quantity-' + foodId);
-        if (quantityInput) {
-            var currentQuantity = parseInt(quantityInput.value);
-            if (currentQuantity > 1) {
-                quantityInput.value = currentQuantity - 1;
-                hiddenQuantityInput.value = currentQuantity - 1;
-            }
-        } else {
-            console.error('Quantity input element not found for ID:', foodId);
+        if (quantityInput && parseInt(quantityInput.value) > 1) {
+            quantityInput.value = parseInt(quantityInput.value) - 1;
+            hiddenQuantityInput.value = quantityInput.value;
         }
     }
 
@@ -184,11 +241,8 @@
         var quantityInput = document.getElementById('quantity-' + foodId);
         var hiddenQuantityInput = document.getElementById('hidden-quantity-' + foodId);
         if (quantityInput) {
-            var currentQuantity = parseInt(quantityInput.value);
-            quantityInput.value = currentQuantity + 1;
-            hiddenQuantityInput.value = currentQuantity + 1;
-        } else {
-            console.error('Quantity input element not found for ID:', foodId);
+            quantityInput.value = parseInt(quantityInput.value) + 1;
+            hiddenQuantityInput.value = quantityInput.value;
         }
     }
 </script>

@@ -1,63 +1,132 @@
 ﻿@model FoodDelivery.Domain.Identity.FoodDeliveryAppUser
 @{
-    ViewData["Title"] = "Index";
-}
-@{
+    ViewData["Title"] = "User Dashboard";
 }
 
-<div class="container">
+<div class="container my-5">
     <div class="row">
         <div class="col-md-3">
-            <div class="shadow-sm bg-white h-100">
-                <div class="p-4 border-bottom">
-                    <div class="text-center">
-                        <h6 class="mb-2">@Model.FirstName @Model.LastName</h6>
-                        <p class="mb-1">@Model.PhoneNumber</p>
-                        <p class="mb-1">@Model.Email</p>
-                        <p class="mb-0 text-black font-weight-bold">
-                            <a class="btn btn-light" href="#">Edit Profile</a>
-                        </p>
-                    </div>
+            <div class="card shadow-sm border-0">
+                <div class="card-header text-white text-center" style="background-color: #89A8B2;">
+                    <h6 class="mb-0">@Model.FirstName @Model.LastName</h6>
                 </div>
-                <ul class="nav nav-tabs flex-column border-0 p-3">
+                <div class="card-body text-center" style="background-color: #F1F0E8;">
+                    <p class="mb-1 text-muted"><i class="bi bi-telephone-fill me-2"></i>@Model.PhoneNumber</p>
+                    <p class="mb-1 text-muted"><i class="bi bi-envelope-fill me-2"></i>@Model.Email</p>
+                    <a class="btn btn-outline-primary btn-sm mt-3" href="#" style="color: #89A8B2; border-color: #89A8B2;">
+                        <i class="bi bi-pencil"></i> Edit Profile
+                    </a>
+                </div>
+                <ul class="nav nav-pills flex-column p-3" style="background-color: #E5E1DA;">
                     @if (Model.Role == FoodDelivery.Domain.Enumerations.UserRole.OWNER)
                     {
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Restaurants" asp-action="Index">Restaurants</a>
+                            <a class="nav-link text-dark" asp-controller="Restaurants" asp-action="Index">
+                                <i class="bi bi-shop me-2"></i> Restaurants
+                            </a>
                         </li>
                     }
-                    <li class="nav-item">
-                        <a class="nav-link active" asp-controller="Orders" asp-action="Index">Current Orders</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active">Finished Orders</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active">Favorites</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" asp-action="Addresses" asp-route-id="@Model?.Email">My Addresses</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active">Log Out</a>
-                    </li>
+                    @if (Model.Role == FoodDelivery.Domain.Enumerations.UserRole.REGULAR)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="#">
+                                <i class="bi bi-check-circle-fill me-2"></i> Finished Orders
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="#">
+                                <i class="bi bi-heart-fill me-2"></i> Favorites
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-action="Addresses" asp-route-id="@Model?.Email">
+                                <i class="bi bi-geo-alt-fill me-2"></i> My Addresses
+                            </a>
+                        </li>
+                    }
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="#">
+                                <i class="bi bi-box-arrow-right me-2"></i> Log Out
+                            </a>
+                        </li>
                 </ul>
             </div>
         </div>
+
         <div class="col-md-9">
-            <div class="shadow-sm bg-white p-4 h-100">
-                <div class="tab-content">
-                    <div>
-                        <div class="float-right">
-                            <a class="btn btn-sm">Help</a>
-                        </div>
-                        <div class="text-center">
-                            <h3>You have no active orders</h3>
-                            <h6>Fill the wishlist</h6>
-                        </div>
+            <div class="card shadow-sm border-0">
+                <div class="card-body" style="background-color: #F1F0E8;">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5 class="card-title" style="color: #89A8B2;">Dashboard</h5>
+                        <a class="btn btn-outline-secondary btn-sm" href="#" style="color: #89A8B2; border-color: #89A8B2;">
+                            <i class="bi bi-question-circle"></i> Help
+                        </a>
                     </div>
+                    @if (Model.Role == FoodDelivery.Domain.Enumerations.UserRole.REGULAR)
+                    {
+                        <div class="text-center">
+                            <i class="bi bi-emoji-frown fs-1 text-muted mb-3"></i>
+                            <a asp-controller="Wishlists" asp-action="Index" class="btn btn-primary mt-3" style="background-color: #89A8B2; border-color: #89A8B2;">
+                                <i class="bi bi-heart-fill"></i> Go to Wishlist
+                            </a>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .nav-pills .nav-link.active {
+        background-color: #89A8B2 !important;
+        color: #F1F0E8 !important;
+        font-weight: bold;
+    }
+
+    .nav-pills .nav-link {
+        border-radius: 0;
+        padding: 10px 15px;
+        transition: background-color 0.3s ease;
+    }
+
+        .nav-pills .nav-link:hover {
+            background-color: #B3C8CF;
+            color: #F1F0E8;
+        }
+
+    .btn-outline-primary {
+        border-color: #89A8B2;
+        color: #89A8B2;
+    }
+
+        .btn-outline-primary:hover {
+            background-color: #B3C8CF;
+            color: #F1F0E8;
+        }
+
+    .btn-primary {
+        background-color: #89A8B2;
+        border-color: #89A8B2;
+    }
+
+        .btn-primary:hover {
+            background-color: #B3C8CF;
+            color: #F1F0E8;
+        }
+
+    .card-title {
+        color: #89A8B2;
+    }
+
+    .card-header {
+        font-size: 1rem;
+        font-weight: bold;
+        background-color: #89A8B2;
+        color: #F1F0E8;
+    }
+</style>

@@ -6,54 +6,70 @@
     var restaurant = ViewBag.Restaurant as Restaurant;
 }
 
-<h2>Manage Menu for @restaurant.Name</h2>
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+</style>
 
-<form asp-action="CreateMenu" method="post">
-    <input type="hidden" asp-for="@Model.RestaurantId" />
-
-    <h3>Existing Menu Items</h3>
-    <div id="existingMenuItemsContainer">
-        @foreach (var food in @Model.ExistingMenu)
-        {
-            <div class="food-item">
-                <input asp-for="@food.Name" placeholder="Food Name" />
-                <input asp-for="@food.Price" placeholder="Price" />
-                <input asp-for="@food.Description" placeholder="Description" />
-                <input asp-for="@food.Image" placeholder="Image" />
-                @Html.DropDownListFor(
-                         x => @food.FoodCategoryId,
-                         new SelectList(categories, "Id", "Name"),
-                         "Select Food Category",
-                         new { @class = "form-control" }
-                         )
-                <a class="deleteFoodButton" data-id="@food.Id" asp-action="Delete" asp-route-id="@food.Id" asp-controller="Foods">Delete</a>
-                <a class="editFoodButton" data-id="@food.Id" asp-action="Edit" asp-route-id="@food.Id" asp-controller="Foods">Edit</a>
-            </div>
-        }
+<div class="container my-5">
+    <div class="text-center mb-4">
+        <h2 style="color: #89A8B2;">Manage Menu for @restaurant.Name</h2>
     </div>
 
-    <h3>Add New Menu Items</h3>
-    <div id="newMenuItemsContainer">
-        @foreach (var food in @Model.NewMenu)
-        {
-            <div class="food-item">
-                <input asp-for="@food.Name" placeholder="Food Name" />
-                <input asp-for="@food.Price" placeholder="Price" />
-                <input asp-for="@food.Description" placeholder="Description" />
-                <input asp-for="@food.Image" placeholder="Image" />
-                @Html.DropDownListFor(
-                         x => @food.FoodCategoryId,
-                         new SelectList(categories, "Id", "Name"),
-                         "Select Food Category",
-                         new { @class = "form-control" }
-                         )
-            </div>
-        }
-    </div>
+    <form asp-action="CreateMenu" method="post">
+        <input type="hidden" asp-for="@Model.RestaurantId" />
 
-    <button type="button" id="addNewFoodButton">+ADD NEW ITEM</button>
-    <button type="submit">Save Menu</button>
-</form>
+        <h3 style="color: #89A8B2;">Existing Menu Items</h3>
+        <div id="existingMenuItemsContainer">
+            @foreach (var food in @Model.ExistingMenu)
+            {
+                <div class="card mb-3 shadow-sm" style="background-color: #F1F0E8; border: 1px solid #B3C8CF; border-radius: 8px; padding: 15px;">
+                    <div class="mb-2">
+                        <input asp-for="@food.Name" class="form-control mb-2" placeholder="Food Name" style="border-color: #B3C8CF;" />
+                        <input asp-for="@food.Price" class="form-control mb-2" placeholder="Price" style="border-color: #B3C8CF;" />
+                        <input asp-for="@food.Description" class="form-control mb-2" placeholder="Description" style="border-color: #B3C8CF;" />
+                        <input asp-for="@food.Image" class="form-control mb-2" placeholder="Image" style="border-color: #B3C8CF;" />
+                        @Html.DropDownListFor(
+                                 x => @food.FoodCategoryId,
+                                 new SelectList(categories, "Id", "Name"),
+                                 "Select Food Category",
+                                 new { @class = "form-control", style = "border-color: #B3C8CF;" }
+                                 )
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <a class="btn btn-sm" style="background-color: #B3C8CF; color: #F1F0E8;" asp-action="Delete" asp-route-id="@food.Id" asp-controller="Foods">Delete</a>
+                        <a class="btn btn-sm" style="background-color: #89A8B2; color: #F1F0E8;" asp-action="Edit" asp-route-id="@food.Id" asp-controller="Foods">Edit</a>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <h3 style="color: #89A8B2;">Add New Menu Items</h3>
+        <div id="newMenuItemsContainer">
+            @foreach (var food in @Model.NewMenu)
+            {
+                <div class="card mb-3 shadow-sm" style="background-color: #F1F0E8; border: 1px solid #B3C8CF; border-radius: 8px; padding: 15px;">
+                    <input asp-for="@food.Name" class="form-control mb-2" placeholder="Food Name" style="border-color: #B3C8CF;" />
+                    <input asp-for="@food.Price" class="form-control mb-2" placeholder="Price" style="border-color: #B3C8CF;" />
+                    <input asp-for="@food.Description" class="form-control mb-2" placeholder="Description" style="border-color: #B3C8CF;" />
+                    <input asp-for="@food.Image" class="form-control mb-2" placeholder="Image" style="border-color: #B3C8CF;" />
+                    @Html.DropDownListFor(
+                             x => @food.FoodCategoryId,
+                             new SelectList(categories, "Id", "Name"),
+                             "Select Food Category",
+                             new { @class = "form-control", style = "border-color: #B3C8CF;" }
+                             )
+                </div>
+            }
+        </div>
+
+        <div class="mt-4 d-flex justify-content-between">
+            <button type="button" id="addNewFoodButton" class="btn" style="background-color: #B3C8CF; color: #F1F0E8;">+ Add New Item</button>
+            <button type="submit" class="btn" style="background-color: #89A8B2; color: #F1F0E8;">Save Menu</button>
+        </div>
+    </form>
+</div>
 
 @section Scripts {
     <script type="text/javascript">
@@ -61,18 +77,18 @@
 
         document.getElementById('addNewFoodButton').addEventListener('click', function () {
             var container = document.getElementById('newMenuItemsContainer');
-            var newFoodItem = `<div class="food-item">
-                                        <input name="NewMenu[${newFoodIndex}].Name" placeholder="Food Name" />
-                                        <input name="NewMenu[${newFoodIndex}].Price" placeholder="Price" />
-                                        <input name="NewMenu[${newFoodIndex}].Description" placeholder="Description" />
-                                        <input name="NewMenu[${newFoodIndex}].Image" placeholder="Image" />
-                                        <select name="NewMenu[${newFoodIndex}].FoodCategoryId">
+            var newFoodItem = `<div class="card mb-3 shadow-sm" style="background-color: #F1F0E8; border: 1px solid #B3C8CF; border-radius: 8px; padding: 15px;">
+                                            <input name="NewMenu[${newFoodIndex}].Name" class="form-control mb-2" placeholder="Food Name" style="border-color: #B3C8CF;" />
+                                            <input name="NewMenu[${newFoodIndex}].Price" class="form-control mb-2" placeholder="Price" style="border-color: #B3C8CF;" />
+                                            <input name="NewMenu[${newFoodIndex}].Description" class="form-control mb-2" placeholder="Description" style="border-color: #B3C8CF;" />
+                                            <input name="NewMenu[${newFoodIndex}].Image" class="form-control mb-2" placeholder="Image" style="border-color: #B3C8CF;" />
+                                            <select name="NewMenu[${newFoodIndex}].FoodCategoryId" class="form-control" style="border-color: #B3C8CF;">
         @foreach (var category in categories)
         {
-                                                    <option value="@category.Id">@category.Name</option>
+                                                        <option value="@category.Id">@category.Name</option>
         }
-                                        </select>
-                                       </div>`;
+                                            </select>
+                                        </div>`;
             container.insertAdjacentHTML('beforeend', newFoodItem);
             newFoodIndex++;
         });

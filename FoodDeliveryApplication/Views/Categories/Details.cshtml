@@ -3,78 +3,126 @@
 
 @{
     ViewData["Title"] = "Details";
-}
-
-@{
     var restaurants = ViewBag.Restaurants as List<Restaurant> ?? new List<Restaurant>();
+    var isRegularUser = User.IsInRole("Regular");
 }
 
-@if (restaurants.Count == 0)
-{
-    <div class="alert alert-info" role="alert">
-        No restaurants available in this category.
-    </div>
-}
-else
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Location</th>
-                <th>Latitude</th>
-                <th>Longitude</th>
-                <th>Rating</th>
-                <th>Available</th>
-                <th>Delivery Time</th>
-                <th>Working From</th>
-                <th>Working To</th>
-                <th>Phone Number</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in restaurants)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Location)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Latitude)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Longitude)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Rating)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.IsAvailable)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DeliveryTime)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.WorkingFrom)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.WorkingTo)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PhoneNumber)
-                    </td>
-                    <td>
-                        <button class="btn btn-secondary">
-                            <a asp-controller="Restaurants" asp-action="Details" asp-route-id="@item.Id" class="text-white">Details</a>
-                        </button>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+    h3 {
+        color: #89A8B2;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+    .table {
+        background-color: #B3C8CF;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
 
+        .table thead {
+            background-color: #89A8B2;
+            color: #F1F0E8;
+        }
+
+        .table tbody tr:nth-child(odd) {
+            background-color: #E5E1DA;
+        }
+
+        .table tbody tr:nth-child(even) {
+            background-color: #E5E1DA;
+        }
+
+    .badge {
+        font-size: 0.85rem;
+    }
+
+    .btn-success,
+    .btn-info {
+        background-color: #89A8B2;
+        border: none;
+        color: #F1F0E8;
+    }
+
+        .btn-success:hover,
+        .btn-info:hover {
+            background-color: #B3C8CF;
+            color: #F1F0E8;
+        }
+</style>
+
+<div class="container mt-4">
+    <h3 class="mb-4 text-center">@ViewData["Title"] - @Model.Name</h3>
+
+    @if (restaurants.Count == 0)
+    {
+        <div class="alert alert-info text-center" role="alert">
+            No restaurants available in this category.
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Location</th>
+                        <th scope="col">Latitude</th>
+                        <th scope="col">Longitude</th>
+                        <th scope="col">Rating</th>
+                        <th scope="col">Available</th>
+                        <th scope="col">Delivery Time</th>
+                        <th scope="col">Working From</th>
+                        <th scope="col">Working To</th>
+                        <th scope="col">Phone Number</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in restaurants)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Location)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Latitude)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Longitude)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Rating)</td>
+                            <td>
+                                @if (item.IsAvailable.Equals(true))
+                                {
+                                    <span class="badge bg-success">Yes</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">No</span>
+                                }
+                            </td>
+                            <td>@Html.DisplayFor(modelItem => item.DeliveryTime)</td>
+                            <td>@Html.DisplayFor(modelItem => item.WorkingFrom)</td>
+                            <td>@Html.DisplayFor(modelItem => item.WorkingTo)</td>
+                            <td>@Html.DisplayFor(modelItem => item.PhoneNumber)</td>
+                            <td>
+                                <div class="d-flex flex-column">
+                                   
+                                        <a href="@Url.Action("ExportMenuToPDF", "Restaurants", new { restaurantId = item.Id })"
+                                           class="btn btn-sm btn-info mb-2">
+                                            <i class="bi bi-file-earmark-pdf"></i> Export Menu
+                                        </a>
+                                    
+                                    <a asp-controller="Restaurants" asp-action="Details" asp-route-id="@item.Id"
+                                       class="btn btn-sm btn-success text-white">
+                                        <i class="bi bi-info-circle"></i> Details
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

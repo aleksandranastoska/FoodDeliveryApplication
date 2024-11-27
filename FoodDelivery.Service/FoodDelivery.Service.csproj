@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="GemBox.Document" Version="35.0.1906" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.8" />
+    <PackageReference Include="Stripe.net" Version="47.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\FoodDelivery.Domain\FoodDelivery.Domain.csproj" />
     <ProjectReference Include="..\FoodDelivery.Repository\FoodDelivery.Repository.csproj" />
   </ItemGroup>

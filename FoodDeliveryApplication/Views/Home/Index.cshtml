@@ -5,126 +5,72 @@
 
 @{
     var categories = ViewBag.Categories as List<Category>;
-    var popularRestaurants = ViewBag.Restaurants as List<Restaurant>;
 }
 
-<section class="pt-5 homepage-search-block-white position-relative overflow-hidden">
-    <div class="banner-overlay"></div>
+<section id="categories" class="section pt-5 categories-section">
     <div class="container">
-        <div class="row d-flex align-items-center">
-            <div class="col-md-8">
-                <div class="homepage-search-title">
-                    <div class="spacer"></div>
-                    <section class="cd-intro">
-                        <h1 class="cd-headline rotate-1">
-                            <span>Order</span>
-                            <span class="cd-words-wrapper" style="width: 180px;"></span>
-                        </h1>
-                        <h5 class="mb-5 text-gray pl-1 mt-4">Quick delivery</h5>
-                    </section>
-                </div>
-            </div>
-            <div class="col-md-4"></div>
+        <div class="section-header text-center mb-5">
+            <h2 class="fw-bold text-salmon">Popular Categories</h2>
+            <p class="text-muted fs-5">Discover food options from your favorite categories</p>
         </div>
-    </div>
-</section>
-<section class="section pt-4 categories-section">
-    <div class="container">
-        <div class="section-header ml-2">
-            <h2>Popular categories</h2>
         </div>
-        @for (int i = 0; i < categories.Count; i++)
-        {
-            var category = categories[i];
-            if (i % 6 == 0)
+        <div class="row g-4">
+            @foreach (var category in categories)
             {
-                @:<div class="row">
-            }
-
-            <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
-                <a asp-controller="Categories" asp-action="Details" asp-route-id="@category.Id" class="text-decoration-none">
-                    <div class="card" style="width: 100%; height: 12rem;">
-                        <img class="card-img-top" src="@category.Image" alt="@category.Name" style="height: 7rem; object-fit: cover;">
-                        <div class="card-body text-center">
-                            <h6 class="card-title">@category.Name</h6>
-                        </div>
-                    </div>
-                </a>
-            </div>
-
-            @if (i % 6 == 5 || i == categories.Count - 1)
-            {
-                @:</div>
-            }
-        }
-    </div>
-</section>
-
-
-<section class="owl-prevnext section products-section bg-white bordermob">
-    <div class="tab-pane fade show" role="tabpanel" aria-labelledby="tabs">
-        <section class="owl-prevnext section products-section bg-white bordermob">
-            <div class="container">
-                <div class="customNavigation">
-                    <a class="btn prev">
-                        <i class="fa fa-angle-left">::before</i>
-                    </a>
-                    <a class="btn next">
-                        <i class="fa fa-angle-right">::before</i>
-                    </a>
-                </div>
-                <div class="section-header ml-2">
-                    <h2>Popular restaurants</h2>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="owl-carousel owl-carousel-four owl-theme owl-loaded owl-drag">
-                            <div class="owl-stage-outer">
-                                <div class="owl-stage" style="transform: translate3d(-2337px, 0px, 0px); transition: all; width: 8880px;">
-                                    @foreach(var restaurant in popularRestaurants)
-                                    {
-                                        <div class="owl-item cloned" style="width: 500px;">
-                                            <div class="item">
-                                                <div class="list-card bg-white h-100 rounded overflow-hidden position-relative shadow-sm">
-                                                    <div class="list-card-image">
-                                                        <a href="#">
-                                                            <img src="" alt="..."/>
-                                                        </a>
-                                                    </div>
-                                                    <div class="p-3 position-relative">
-                                                        <div class="list-card-body">
-                                                            <h6 class="mb-1">
-                                                                <a href="#" class="text-black">@restaurant.Name</a>
-                                                            </h6>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    }
-                                </div>
+                <div class="col-lg-2 col-md-4 col-sm-6">
+                    <a asp-controller="Categories" asp-action="Details" asp-route-id="@category.Id" class="text-decoration-none">
+                        <div class="card shadow-sm h-100 border-0">
+                            <img class="card-img-top" src="@category.Image" alt="@category.Name" style="height: 150px; object-fit: cover;">
+                            <div class="card-body text-center">
+                                <h6 class="card-title text-dark fw-bold">@category.Name</h6>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
-            </div>
-        </section>
-        <section class="owl-prevnext section products-section bg-white bordermob"></section>
+            }
+        </div>
     </div>
 </section>
 
+
 <style>
-    .owl-carousel .item {
-        width: 100%; 
+    body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+}
+
+.categories-section .card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+}
+.categories-section .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+.categories-section .card-img-top {
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.section-header h2 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #007bff;
+}
+.section-header p {
+    color: #6c757d;
+    font-size: 1.1rem;
+}
+.text-salmon {
+        color: #B3C8CF !important; 
     }
 
-        .owl-carousel .item h1 {
-            text-align: center; 
-        }
-
-    .osahan-category-item {
-        padding: 10px; 
-    }
 </style>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -136,25 +82,24 @@
 
 <script>
     $(document).ready(function () {
-        $('.owl-carousel-category').owlCarousel({
+        $(".owl-carousel").owlCarousel({
             loop: true,
-            margin: 10,
+            margin: 20,
             nav: true,
-            dots: false,
+            dots: true,
+            autoplay: true,
+            autoplayTimeout: 3000,
             responsive: {
                 0: {
                     items: 1
                 },
-                600: {
-                    items: 3
+                768: {
+                    items: 2
                 },
-                1000: {
-                    items: 5
+                1200: {
+                    items: 3
                 }
             }
         });
-    });
-    $(document).ready(function () {
-        $('.owl-carousel').owlCarousel();
     });
 </script>

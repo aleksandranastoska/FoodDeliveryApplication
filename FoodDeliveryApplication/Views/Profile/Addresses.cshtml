@@ -5,89 +5,68 @@
     var addresses = ViewBag.Addresses as List<Address>;
 }
 
-<div class="container">
+<div class="container my-5">
     <div class="row">
         <div class="col-md-3">
-            <div class="shadow-sm bg-white h-100">
-                <div class="p-4 border-bottom">
-                    <div class="text-center">
-                        <h6 class="mb-2">@user.FirstName @user.LastName</h6>
-                        <p class="mb-1">@user.PhoneNumber</p>
-                        <p class="mb-1">@user.Email</p>
-                        <p class="mb-0 text-black font-weight-bold">
-                            <a class="btn btn-light" href="#">Edit Profile</a>
-                        </p>
-                    </div>
+            <div class="card shadow-sm border-0">
+                <div class="card-header text-white text-center" style="background-color: #89A8B2;">
+                    <h6 class="mb-1">@user.FirstName @user.LastName</h6>
                 </div>
-                <ul class="nav nav-tabs flex-column border-0 p-3">
-                    <li class="nav-item">
-                        <a class="nav-link active">Restaurant Ownership</a>
+                <div class="card-body text-center" style="background-color: #F1F0E8;">
+                    <p class="mb-1 text-muted"><i class="bi bi-telephone-fill me-2"></i>@user.PhoneNumber</p>
+                    <p class="mb-1 text-muted"><i class="bi bi-envelope-fill me-2"></i>@user.Email</p>
+                    <a class="btn btn-outline-primary btn-sm mt-3" style="color: #89A8B2; border-color: #89A8B2;" href="#">
+                        <i class="bi bi-pencil"></i> Edit Profile
+                    </a>
+                </div>
+                <ul class="nav nav-pills flex-column p-3" style="background-color: #E5E1DA;">
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active">Current Orders</a>
+                        <a class="nav-link text-dark active" href="#">
+                            <i class="bi bi-geo-alt"></i> My Addresses
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active">Finished Orders</a>
+                        <a class="nav-link text-dark" href="#">
+                            <i class="bi bi-heart"></i> Favorites
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active">Favorites</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" asp-action="Addresses" asp-route-email="@user.Email">My Addresses</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active">Log Out</a>
+                        <a class="nav-link text-dark" href="#">
+                            <i class="bi bi-box-arrow-right"></i> Log Out
+                        </a>
                     </li>
                 </ul>
             </div>
         </div>
+
         <div class="col-md-9">
-            <div class="shadow-sm bg-white p-4 h-100">
-                <div class="tab-content">
-                    <h4 class="font-weight-bold mt-0 mb-4">My Addresses</h4>
-                    <div class="modal fade">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">Add address</h5>
-                                    <button type="button" class="close">
-                                        <span>x</span>
-                                    </button>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn d-flex w-50 text-center justify-content-center btn-outline-primary">Cancel</button>
-                                    <button type="submit" class="btn d-flex w-50 text-center justify-content-center btn-primary">Add</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            <div class="card shadow-sm border-0">
+                <div class="card-body" style="background-color: #F1F0E8;">
+                    <h4 class="font-weight-bold mb-4" style="color: #89A8B2;">My Addresses</h4>
+
                     <div class="row">
                         @foreach (var address in addresses)
                         {
                             <div class="col-md-6">
-                                <div class="bg-white card mb-4 border border-success">
-                                    <div class="p-4">
-                                        <div class="media">
-                                            <div class="media-body">
-                                                <a class="btn float-right mr-2">Delete</a>
-                                                <h6 class="mb-1 text-black">@address.Title</h6>
-                                                <p>@address.Street</p>
-                                                <p class="text-black">
-                                                    <span class="badge badge-gray">@address.Number</span>
-                                                    <span class="badge badge-gray">@address.Flat</span>
-                                                </p>
-                                                <p class="mb-0 text-black font-weight-bold">
-                                                    <a class="btn btn-sm btn-success mr-2">Deliver here</a>
-                                                </p>
-                                            </div>
-                                        </div>
+                                <div class="card mb-4" style="border: 1px solid #B3C8CF;">
+                                    <div class="card-body">
+                                        <h6 class="card-title mb-1" style="color: #89A8B2;">@address.Title</h6>
+                                        <p class="card-text text-muted">
+                                            @address.Street,
+                                            <span class="badge" style="background-color: #B3C8CF; color: #F1F0E8;">@address.Number</span>
+                                            <span class="badge" style="background-color: #B3C8CF; color: #F1F0E8;">@address.Flat</span>
+                                        </p>
                                     </div>
                                 </div>
                             </div>
                         }
+
                         <div class="col-md-6">
-                            <div class="bg-white card mb-4 border p-5">
-                                <button class="btn btn-gray" type="button" asp-action="AddAddress"><a class="btn btn-primary" asp-action="AddAddress">Add New Address</a></button>
+                            <div class="card border p-4 text-center">
+                                <a class="btn btn-primary w-100" style="background-color: #89A8B2; border-color: #89A8B2;" asp-action="AddAddress">
+                                    <i class="bi bi-plus-circle"></i> Add New Address
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -96,4 +75,70 @@
         </div>
     </div>
 </div>
-<a class="btn btn-primary" asp-action="AddAddress">Add New Address</a>
+
+<div class="modal fade" id="addAddressModal" tabindex="-1" aria-labelledby="addAddressModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addAddressModalLabel" style="color: #89A8B2;">Add Address</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="addressTitle" class="form-label">Title</label>
+                        <input type="text" class="form-control" id="addressTitle" placeholder="e.g., Home">
+                    </div>
+                    <div class="mb-3">
+                        <label for="street" class="form-label">Street</label>
+                        <input type="text" class="form-control" id="street" placeholder="e.g., Main Street">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="number" class="form-label">Number</label>
+                            <input type="text" class="form-control" id="number">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="flat" class="form-label">Flat</label>
+                            <input type="text" class="form-control" id="flat">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" style="color: #89A8B2;">Cancel</button>
+                <button type="submit" class="btn btn-primary" style="background-color: #89A8B2; border-color: #89A8B2;">Add Address</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+    .card-title {
+        font-weight: bold;
+        font-size: 1.1rem;
+    }
+
+    .card-text {
+        font-size: 0.9rem;
+    }
+
+    .nav-pills .nav-link.active {
+        background-color: #89A8B2 !important;
+        color: #F1F0E8 !important;
+        font-weight: bold;
+    }
+
+    .btn-primary {
+        background-color: #89A8B2;
+        border-color: #89A8B2;
+    }
+
+        .btn-primary:hover {
+            background-color: #B3C8CF;
+            color: #F1F0E8;
+        }
+</style>

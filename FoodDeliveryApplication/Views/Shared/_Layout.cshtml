@@ -1,5 +1,4 @@
-﻿@using FoodDelivery.Domain.Enumerations
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -8,47 +7,40 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/FoodDeliveryApp.styles.css" asp-append-version="true" />
+    <style>
+        .custom-navbar {
+            background-color: #89A8B2 !important; 
+        }
+
+            .custom-navbar .navbar-brand,
+            .custom-navbar .navbar-nav .nav-link {
+                color: #F1F0E8 !important;
+            }
+    </style>
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-light navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-lg navbar-dark custom-navbar shadow-sm">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                <a class="navbar-brand fw-bold" asp-area="" asp-controller="Home" asp-action="Index">
+                    <i class="bi bi-house-door-fill"></i> FoodDeliveryApp
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav m1-auto flex-grow-1">
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                       
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-controller="WishLists" asp-action="Index">
+                                    <i class="bi bi-heart-fill"></i> Wishlist
+                                </a>
+                            </li>
+                        
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Wishlists" asp-action="Index">Wishlist</a>
-                            <div id="mywishlist" class="collapse header">
-                                <div class="bg-white rounded border shadow-sm mb-4 p-4">
-                                    <div id="wishlist_empty" style="display: block;">
-                                        <h6>Wishlist is currently empty!</h6>
-                                    </div>
-                                    <div id="wishlist_full" style="display: none;">
-                                        <div>
-                                            <h5 class="mb-1">Your order</h5>
-                                            <p class="mb-4" id="wishlist_total_items">0 Items</p>
-                                            <div class="bg-white rounded shadow-sm mb-2" id="wishlist_design">
-                                                <p>Wishlist is empty</p>
-                                            </div>
-                                            <div class="pt-3 pr-1 pb-3 p-1 border-bottom" id="smart_delivery"></div>
-                                            <div>0</div>
-                                        </div>
-                                        <div>
-                                            <div class="mb-2 bg-white rounded p-2 clearfix">
-                                                <h6 class="font-weight-bold text-right mb-2" id="wishlist_final_items">0</h6>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Profile" asp-action="Index">
-                                <span class="d-none d-sm-inline">My Profile</span>
+                            <a class="nav-link text-light" asp-area="" asp-controller="Profile" asp-action="Index">
+                                <i class="bi bi-person-circle"></i> My Profile
                             </a>
                         </li>
                     </ul>
@@ -63,9 +55,9 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - FoodDeliveryApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="border-top footer text-muted py-3 bg-light">
+        <div class="container text-center">
+            &copy; 2024 - <strong>FoodDeliveryApp</strong> - <a asp-area="" asp-controller="Home" asp-action="Privacy" class="text-decoration-none">Privacy</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -73,4 +65,10 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
+
+<style>
+    .custom-navbar {
+        background-color: lightblue;
+    }
+</style>
 </html>

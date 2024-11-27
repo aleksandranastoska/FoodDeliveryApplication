@@ -25,25 +25,26 @@ namespace FoodDelivery.Repository.Implementation
 
         public List<Order> GetAll()
         {
-            return entities
-                .Include(o=>o.FoodsInOrder)
-                .Include(o=>o.Owner)
-                .Include("FoodsInOrder.Food")
-                .ToList();
+            return entities.Include(o => o.FoodsInOrder)
+        .ThenInclude(fio => fio.Food)
+            .ThenInclude(f => f.Restaurant) // Include the Restaurant navigation property
+    .Include(o => o.Owner)
+    .Include(o => o.Address)
+    .ToList();
         }
 
         public Order GetDetailsForOrder(BaseEntity? id)
         {
-            return entities
+            return entities.Include(o => o.Address)
                 .Include(o => o.FoodsInOrder)
-                .Include(o => o.Owner)
                 .Include("FoodsInOrder.Food")
+                .Include(o => o.Owner)
                 .SingleOrDefaultAsync(z => z.Id == id.Id).Result;
         }
 
         public Order GetDetailsForOrder(Guid? id)
         {
-            return entities
+            return entities.Include(o => o.Address)
                 .Include(o => o.FoodsInOrder)
                 .Include(o => o.Owner)
                 .Include("FoodsInOrder.Food")

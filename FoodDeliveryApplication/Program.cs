@@ -1,5 +1,6 @@
 using FoodDelivery.Domain.Helpers;
 using FoodDelivery.Domain.Identity;
+using FoodDelivery.Domain.Payment;
 using FoodDelivery.Repository;
 using FoodDelivery.Repository.Implementation;
 using FoodDelivery.Repository.Interface;
@@ -11,7 +12,7 @@ using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("StripeSettings"));
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
@@ -33,6 +34,8 @@ builder.Services.AddTransient<ICategoryService, CategoryService>();
 builder.Services.AddTransient<IFoodCategoryService, FoodCategoryService>();
 builder.Services.AddTransient<IWishlistService, WishlistService>();
 builder.Services.AddTransient<IOrderService, OrderService>();
+builder.Services.AddControllersWithViews().AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
 builder.Services.AddScoped<CreateRestaurantHelper>();
 builder.Services.AddTransient<IsRestaurantAvailableHelper>();
@@ -44,7 +47,6 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
@@ -52,7 +54,6 @@ if (app.Environment.IsDevelopment())
 else
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 

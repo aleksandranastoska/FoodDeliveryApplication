@@ -33,7 +33,10 @@ namespace FoodDelivery.Service.Implementation
         {
             return _orderRepository.GetDetailsForOrder(id);
         }
-
+        public Order GetDetailsForOrder(BaseEntity? id)
+        {
+            return _orderRepository.GetDetailsForOrder(id);
+        }
         public void UpdateExistingOrder(Order o)
         {
             _orderRepository.Update(o);

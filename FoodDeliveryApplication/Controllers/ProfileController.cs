@@ -41,6 +41,7 @@ namespace FoodDeliveryApplication.Controllers
         {
             var loggedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+
             if (loggedInUserId == null)
             {
                 return RedirectToAction("Login", "Account");

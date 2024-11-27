@@ -1,27 +1,57 @@
 ﻿@model FoodDelivery.Domain.DTO.AddressDTO
 @using FoodDelivery.Domain.DTO
-<h2>Add New Address</h2>
 
-<form asp-action="AddAddress" method="post">
-    <div class="form-group">
-        <label asp-for="Title"></label>
-        <input asp-for="Title" class="form-control" />
-        <span asp-validation-for="Title" class="text-danger"></span>
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .btn-custom {
+        background-color: #B3C8CF;
+        border-color: #B3C8CF;
+        color: #fff;
+    }
+
+        .btn-custom:hover {
+            background-color: #89A8B2;
+            border-color: #89A8B2;
+        }
+</style>
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <form asp-action="AddAddress" method="post">
+                        <div class="form-group mb-3">
+                            <label asp-for="Title" class="form-label fw-bold">Title</label>
+                            <input asp-for="Title" class="form-control" placeholder="e.g., Home, Office" />
+                            <span asp-validation-for="Title" class="text-danger small"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="Street" class="form-label fw-bold">Street</label>
+                            <input asp-for="Street" class="form-control" placeholder="e.g., Main Street" />
+                            <span asp-validation-for="Street" class="text-danger small"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="Number" class="form-label fw-bold">Number</label>
+                            <input asp-for="Number" class="form-control" placeholder="e.g., 123" />
+                            <span asp-validation-for="Number" class="text-danger small"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="Flat" class="form-label fw-bold">Flat</label>
+                            <input asp-for="Flat" class="form-control" placeholder="e.g., 4B" />
+                            <span asp-validation-for="Flat" class="text-danger small"></span>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-lg btn-custom">
+                                <i class="bi bi-plus-circle"></i> Add Address
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="form-group">
-        <label asp-for="Street"></label>
-        <input asp-for="Street" class="form-control" />
-        <span asp-validation-for="Street" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Number"></label>
-        <input asp-for="Number" class="form-control" />
-        <span asp-validation-for="Number" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Flat"></label>
-        <input asp-for="Flat" class="form-control" />
-        <span asp-validation-for="Flat" class="text-danger"></span>
-    </div>
-    <button type="submit" class="btn btn-primary">Add Address</button>
-</form>
+</div>

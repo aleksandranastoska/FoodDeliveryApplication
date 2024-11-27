@@ -8,6 +8,10 @@ using Microsoft.AspNetCore.Identity;
 using FoodDelivery.Domain.DTO;
 using FoodDelivery.Domain.Helpers;
 using NuGet.Packaging;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using static System.Collections.Specialized.BitVector32;
+using GemBox.Document.Tables;
+using GemBox.Document;
 
 namespace FoodDeliveryApplication.Controllers
 {
@@ -55,15 +59,29 @@ namespace FoodDeliveryApplication.Controllers
 
         public async Task<IActionResult> Details(Guid? id)
         {
-            CheckIfRestaurantIsNull(id);
+            if (id == null)
+            {
+                return NotFound();
+            }
 
             var restaurant = _restaurantService.GetDetailsForRestaurant(id);
 
-            if (!RestaurantExists(restaurant.Id)) return NotFound();
+            if (restaurant == null)
+            {
+                return NotFound();
+            }
+
+            var loggedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var isOwner = restaurant.OwnerId == loggedInUserId;
+
+            var isRegularUser = !isOwner;
+
+            ViewBag.IsOwner = isOwner;
+            ViewBag.IsRegularUser = isRegularUser;
 
             restaurant.IsAvailable = _isRestaurantAvailableHelper.IsRestaurantAvailable(restaurant);
-
-            var isRestaurantFavorite = _restaurantService.IsRestaurantFavoriteForUser(User.FindFirstValue(ClaimTypes.NameIdentifier), restaurant.Id);
+            var isRestaurantFavorite = _restaurantService.IsRestaurantFavoriteForUser(loggedInUserId, restaurant.Id);
             ViewBag.IsFavorite = isRestaurantFavorite;
 
             return View(restaurant);
@@ -172,6 +190,19 @@ namespace FoodDeliveryApplication.Controllers
         {
             var restaurant = _restaurantService.GetDetailsForRestaurant(Id);
 
+            if (restaurant == null)
+            {
+                return NotFound();
+            }
+
+            var loggedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (restaurant.OwnerId != loggedInUserId)
+            {
+                return Forbid(); 
+            }
+
+
             ViewBag.FoodCategories = _foodCategoryService.GetAllFoodCategories();
             ViewBag.Restaurant = restaurant;
 
@@ -250,7 +281,72 @@ namespace FoodDeliveryApplication.Controllers
                 FoodCategoryId = food.FoodCategoryId,
                 RestaurantId = id
             }).ToList();
-        }}
-    
+        }
+
+        [HttpGet]
+        public IActionResult ExportMenuToPDF(Guid restaurantId)
+        {
+
+            ComponentInfo.SetLicense("FREE-LIMITED-KEY");
+
+            var restaurant = _restaurantService.GetDetailsForRestaurant(restaurantId);
+            if (restaurant == null)
+            {
+                return NotFound();
+            }
+
+            var menu = restaurant.Menu;
+
+            var document = new DocumentModel();
+
+            var section = new GemBox.Document.Section(document);
+            section.Blocks.Add(new Paragraph(document, $"Menu for {restaurant.Name}")
+            {
+                ParagraphFormat = new ParagraphFormat
+                {
+                    Alignment = HorizontalAlignment.Center,
+                    SpaceAfter = 20 
+                }
+            });
+
+            section.Blocks.Add(new Paragraph(document, $"Location: {restaurant.Location} ")
+            {
+                ParagraphFormat = new ParagraphFormat
+                {
+                    Alignment = HorizontalAlignment.Center,
+                    SpaceAfter = 20
+                }
+            });
+
+            var table = new GemBox.Document.Tables.Table(document);
+            table.TableFormat.PreferredWidth = new TableWidth(100, TableWidthUnit.Percentage);
+
+            var headerRow = new TableRow(document);
+            headerRow.Cells.Add(new TableCell(document, new Paragraph(document, "Name")));
+            headerRow.Cells.Add(new TableCell(document, new Paragraph(document, "Description")));
+            headerRow.Cells.Add(new TableCell(document, new Paragraph(document, "Price")));
+            table.Rows.Add(headerRow);
+
+            foreach (var food in menu)
+            {
+                var row = new TableRow(document);
+                row.Cells.Add(new TableCell(document, new Paragraph(document, food.Name)));
+                row.Cells.Add(new TableCell(document, new Paragraph(document, food.Description ?? "N/A")));
+                row.Cells.Add(new TableCell(document, new Paragraph(document, $"{food.Price:C}"))); 
+                table.Rows.Add(row);
+            }
+
+            section.Blocks.Add(table);
+            document.Sections.Add(section);
+
+            using (var stream = new MemoryStream())
+            {
+                document.Save(stream, SaveOptions.PdfDefault);
+                return File(stream.ToArray(), "application/pdf", $"{restaurant.Name}_Menu.pdf");
+            }
+        }
+
     }
+
+}
 

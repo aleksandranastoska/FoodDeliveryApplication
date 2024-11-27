@@ -7,6 +7,9 @@ using FoodDelivery.Domain.Identity;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using FoodDelivery.Repository.Interface;
+using FoodDelivery.Domain.Payment;
+using Microsoft.Extensions.Options;
+using Stripe;
 
 namespace FoodDeliveryApplication.Controllers
 {
@@ -16,18 +19,22 @@ namespace FoodDeliveryApplication.Controllers
         private readonly IUserService _userService;
         private readonly UserManager<FoodDeliveryAppUser> _userManager;
         private readonly IOrderRepository _orderRepository;
+        private readonly StripeSettings _stripeSettings;
 
-        public WishlistsController(IWishlistService wishlistService, IUserService userService, UserManager<FoodDeliveryAppUser> userManager, IOrderRepository orderRepository)
+        public WishlistsController(IWishlistService wishlistService, IUserService userService, UserManager<FoodDeliveryAppUser> userManager, IOrderRepository orderRepository, IOptions<StripeSettings> stripeSettings)
         {
             _wishlistService = wishlistService;
             _userService = userService;
             _userManager = userManager;
             _orderRepository = orderRepository;
+            _stripeSettings = stripeSettings.Value;
         }
 
         public IActionResult Index()
         {
             var loggedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            ViewData["StripePublicKey"] = _stripeSettings.PublicKey;
 
             var wishlist = _wishlistService.GetWishlistInfo(loggedInUserId);
 
@@ -168,32 +175,32 @@ namespace FoodDeliveryApplication.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PlaceOrder()
+        public async Task<Order> PlaceOrder()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if (userId == null)
             {
-                return Unauthorized();
+                throw new UnauthorizedAccessException("User not logged in.");
             }
 
             var wishlist = _wishlistService.GetUserWishlist(userId);
 
             if (wishlist == null || !wishlist.FoodInWishlists.Any())
             {
-                return BadRequest("No items in wishlist.");
+                throw new InvalidOperationException("No items in wishlist.");
             }
 
             var newOrder = new Order
             {
                 UserId = userId,
-                Owner = _userManager.FindByIdAsync(userId).Result,
+                Owner = await _userManager.FindByIdAsync(userId), // Use await instead of .Result
                 FoodsInOrder = wishlist.FoodInWishlists.Select(w => new FoodInOrder
                 {
                     FoodId = w.FoodId,
                     Quantity = w.Quantity,
-                    Price = w.Food.Price??0.0,
-                    OrderId = Guid.NewGuid() 
+                    Price = w.Food.Price ?? 0.0,
+                    OrderId = Guid.NewGuid()
                 }).ToList()
             };
 
@@ -202,7 +209,67 @@ namespace FoodDeliveryApplication.Controllers
             wishlist.FoodInWishlists.Clear();
             _wishlistService.UpdateExistingWishlist(wishlist);
 
-            return RedirectToAction("Index", "Orders", new { orderId = newOrder.Id });
+            return newOrder; 
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> PayOrder(string stripeEmail, string stripeToken)
+        {
+            StripeConfiguration.ApiKey = _stripeSettings.SecretKey;
+
+            var customerService = new CustomerService();
+            var chargeService = new ChargeService();
+
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized();
+            }
+
+            var cart = _wishlistService.GetWishlistInfo(userId);
+
+            if (cart == null || cart.TotalPrice <= 0)
+            {
+                return BadRequest("Your cart is empty or invalid.");
+            }
+
+            try
+            {
+                var customer = customerService.Create(new CustomerCreateOptions
+                {
+                    Email = stripeEmail,
+                    Source = stripeToken
+                });
+
+                var charge = chargeService.Create(new ChargeCreateOptions
+                {
+                    Amount = (int)(cart.TotalPrice * 100),
+                    Description = "FoodDelivery Payment",
+                    Currency = "usd",
+                    Customer = customer.Id
+                });
+
+                if (charge.Status == "succeeded")
+                {
+                    var newOrder = await PlaceOrder(); // Get the created order
+                    return RedirectToAction("Index", "Orders", new { orderId = newOrder.Id }); // Redirect with order ID
+                }
+                else
+                {
+                    return RedirectToAction("NotSuccessPayment");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Payment failed: {ex.Message}");
+                return RedirectToAction("NotSuccessPayment");
+            }
+        }
+
+        public IActionResult NotSuccessPayment()
+        {
+            return View(); 
         }
     }
 }

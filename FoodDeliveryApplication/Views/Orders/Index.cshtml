@@ -1,41 +1,90 @@
 ﻿@model FoodDelivery.Domain.DTO.OrderDTO
 
-<div class="container mt-5">
-    <h3>Order Details</h3>
-    <hr />
+<div class="container my-5">
+    <div class="text-center mb-4">
+        <h1 class="text-primary" style="color: #89A8B2;">Order Details</h1>
+        <p class="text-muted">Review your selected items and choose a delivery address to confirm your order.</p>
+    </div>
+
     <div class="row">
         @foreach (var item in Model.Order.FoodsInOrder)
         {
             <div class="col-md-4">
-                <div class="card mb-4 shadow-sm">
-                    <img class="card-img-top" src="@item.Food.Image" alt="Food image" style="height: 225px; width: 100%; display: block;">
-                    <div class="card-body">
-                        <h5 class="card-title">@item.Food.Name</h5>
-                        <p><strong>Quantity:</strong> @item.Quantity</p>
-                        <p><strong>Price:</strong> @item.Price $</p>
+                <div class="card mb-4 shadow-sm" style="border: 1px solid #B3C8CF;">
+                    <img class="card-img-top" src="@item.Food.Image" alt="Food image" style="height: 200px; object-fit: cover;">
+                    <div class="card-body" style="background-color: #F1F0E8;">
+                        <h5 class="card-title" style="color: #89A8B2;">@item.Food.Name</h5>
+                        <p class="card-text text-muted">
+                            <strong>Quantity:</strong> @item.Quantity<br />
+                            <strong>Price:</strong> @item.Price $
+                        </p>
                     </div>
                 </div>
             </div>
         }
     </div>
 
-    <h4>Select Delivery Address</h4>
-    <div class="row">
-        @foreach (var address in Model.Addresses)
-        {
-            <div class="col-md-4">
-                <div class="card mb-4 shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">@address.Title</h5>
-                        <p>@address.Street, No: @address.Number, Flat: @address.Flat</p>
-                    </div>
-                </div>
-            </div>
-        }
-    </div>
-
+    <h4 class="mt-5" style="color: #89A8B2;">Select Delivery Address</h4>
     <form method="post" asp-controller="Orders" asp-action="ConfirmOrder">
         <input type="hidden" name="orderId" value="@Model.Order.Id" />
-        <button type="submit" class="btn btn-success btn-lg mt-4">Confirm Order</button>
+
+        <div class="row">
+            @foreach (var address in Model.Addresses)
+            {
+                <div class="col-md-4">
+                    <div class="card mb-4 shadow-sm" style="border: 1px solid #B3C8CF;">
+                        <div class="card-body" style="background-color: #F1F0E8;">
+                            <h5 class="card-title">
+                                <input type="radio" name="addressId" value="@address.Id" />
+                                <span style="color: #89A8B2;">@address.Title</span>
+                            </h5>
+                            <p class="text-muted">@address.Street, No: @address.Number, Flat: @address.Flat</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-success btn-lg mt-4" style="background-color: #89A8B2; border-color: #89A8B2;">
+                Confirm Order
+            </button>
+        </div>
     </form>
 </div>
+
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .text-primary {
+        color: #89A8B2 !important;
+    }
+
+    .btn-success {
+        background-color: #89A8B2;
+        border-color: #89A8B2;
+    }
+
+        .btn-success:hover {
+            background-color: #B3C8CF;
+            border-color: #B3C8CF;
+        }
+
+    .card {
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    .card-title {
+        font-weight: bold;
+    }
+
+    .card-text {
+        font-size: 0.9rem;
+    }
+
+    .card img {
+        border-bottom: 1px solid #B3C8CF;
+    }
+</style>
