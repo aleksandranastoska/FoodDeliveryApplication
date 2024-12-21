@@ -10,63 +10,72 @@
         <p class="text-muted">Review and manage your favorite items before placing an order.</p>
     </div>
 
-    @if (Model.TotalPrice > 0)
+    @if (Model.Foods == null || !Model.Foods.Any())
     {
-        <div class="text-center mb-4">
-            <p>If you want to pay online, click below to proceed:</p>
-            <form asp-controller="Wishlists" asp-action="PayOrder" method="post">
-                <article>
-                    <script src="https://checkout.stripe.com/checkout.js"
-                            class="stripe-button"
-                            data-key="@ViewData["StripePublicKey"]"
-                            data-locale="auto"
-                            data-description="FoodDelivery Payment"
-                            data-amount="@(Model.TotalPrice * 100)"
-                            data-label="Pay $@Model.TotalPrice">
-                    </script>
-                </article>
-            </form>
+        <div class="text-center mt-5">
+            <h3 class="text-muted">No foods in your wishlist.</h3>
         </div>
     }
-
-    <div class="row">
-        @foreach (var item in Model.Foods)
+    else
+    {
+        @if (Model.TotalPrice > 0)
         {
-            <div class="col-md-4">
-                <div class="card mb-4 shadow-sm" style="border: 1px solid #B3C8CF;">
-                    <img class="card-img-top" src="@item.Food.Image" alt="Food image" style="height: 200px; object-fit: cover;">
-                    <div class="card-body" style="background-color: #F1F0E8;">
-                        <h5 class="card-title" style="color: #89A8B2;">@item.Food.Name</h5>
-                        <p class="card-text text-muted">@item.Food.Description</p>
-                        <p><strong>Price:</strong> @item.Food.Price $</p>
-                        <p><strong>Quantity:</strong> <span id="quantity-@item.FoodId">@item.Quantity</span></p>
+            <div class="text-center mb-4">
+                <p>If you want to pay online, click below to proceed:</p>
+                <form asp-controller="Wishlists" asp-action="PayOrder" method="post">
+                    <article>
+                        <script src="https://checkout.stripe.com/checkout.js"
+                                class="stripe-button"
+                                data-key="@ViewData["StripePublicKey"]"
+                                data-locale="auto"
+                                data-description="FoodDelivery Payment"
+                                data-amount="@(Model.TotalPrice * 100)"
+                                data-label="Pay $@Model.TotalPrice">
+                        </script>
+                    </article>
+                </form>
+            </div>
+        }
 
-                        <div class="input-group mb-3">
-                            <button class="btn btn-outline-secondary" type="button" onclick="decreaseQuantity('@item.FoodId', @item.Food.Price ?? 0)">-</button>
-                            <input type="text" class="form-control text-center" value="@item.Quantity" id="quantity-@item.FoodId" readonly>
-                            <button class="btn btn-outline-secondary" type="button" onclick="increaseQuantity('@item.FoodId', @item.Food.Price ?? 0)">+</button>
-                        </div>
+        <div class="row">
+            @foreach (var item in Model.Foods)
+            {
+                <div class="col-md-4">
+                    <div class="card mb-4 shadow-sm" style="border: 1px solid #B3C8CF;">
+                        <img class="card-img-top" src="@item.Food.Image" alt="Food image" style="height: 200px; object-fit: cover;">
+                        <div class="card-body" style="background-color: #F1F0E8;">
+                            <h5 class="card-title" style="color: #89A8B2;">@item.Food.Name</h5>
+                            <p class="card-text text-muted">@item.Food.Description</p>
+                            <p><strong>Price:</strong> @item.Food.Price $</p>
+                            <p><strong>Quantity:</strong> <span id="quantity-@item.FoodId">@item.Quantity</span></p>
 
-                        <div class="text-center">
-                            <a asp-action="DeleteFromWishlist" asp-controller="Wishlists" asp-route-id="@item.Food.Id"
-                               class="btn btn-danger btn-sm" style="background-color: #B3C8CF; color: #F1F0E8;">
-                                Remove from Wishlist
-                            </a>
+                            <div class="input-group mb-3">
+                                <button class="btn btn-outline-secondary" type="button" onclick="decreaseQuantity('@item.FoodId', @item.Food.Price ?? 0)">-</button>
+                                <input type="text" class="form-control text-center" value="@item.Quantity" id="quantity-@item.FoodId" readonly>
+                                <button class="btn btn-outline-secondary" type="button" onclick="increaseQuantity('@item.FoodId', @item.Food.Price ?? 0)">+</button>
+                            </div>
+
+                            <div class="text-center">
+                                <a asp-action="DeleteFromWishlist" asp-controller="Wishlists" asp-route-id="@item.Food.Id"
+                                   class="btn btn-danger btn-sm" style="background-color: #B3C8CF; color: #F1F0E8;">
+                                    Remove from Wishlist
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        }
-    </div>
+            }
+        </div>
 
-    <div class="text-center mt-5">
-        <h3 class="text-primary">Total Price: <span id="total-price">@Model.TotalPrice</span> $</h3>
-        <form method="post" asp-controller="Wishlists" asp-action="PlaceOrder">
-            <button type="submit" class="btn btn-success btn-lg mt-4" style="background-color: #89A8B2; border-color: #89A8B2;">
-                <i class="bi bi-basket-fill"></i> Place Order
-            </button>
-        </form>
-    </div>
+        <div class="text-center mt-5">
+            <h3 class="text-primary">Total Price: <span id="total-price">@Model.TotalPrice</span> $</h3>
+            <form method="post" asp-controller="Wishlists" asp-action="PlaceOrder">
+                <button type="submit" class="btn btn-success btn-lg mt-4" style="background-color: #89A8B2; border-color: #89A8B2;">
+                    <i class="bi bi-basket-fill"></i> Place Order
+                </button>
+            </form>
+        </div>
+    }
 </div>
 
 <script>

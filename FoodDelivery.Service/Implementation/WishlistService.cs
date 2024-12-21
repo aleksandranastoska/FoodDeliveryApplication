@@ -70,7 +70,7 @@ namespace FoodDelivery.Service.Implementation
             var userWishlist = loggedInUser?.Wishlist;
             var allFoods = userWishlist?.FoodInWishlists?.ToList();
 
-            var price = allFoods.Select(f=>(f.Food.Price * f.Quantity)).Sum();
+            var price = allFoods?.Select(f=>(f.Food.Price * f.Quantity)).Sum();
 
             WishlistDTO wishlistDto = new WishlistDTO
             {
