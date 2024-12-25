@@ -60,5 +60,10 @@ namespace FoodDelivery.Service.Implementation
         {
             return _userRepository.Get(id);
         }
+
+        public void UpdateExistingUser(FoodDeliveryAppUser user)
+        {
+            _userRepository.Update(user);
+        }
     }
 }
