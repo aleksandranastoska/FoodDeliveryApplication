@@ -27,7 +27,7 @@ namespace FoodDelivery.Repository.Implementation
         {
             return entities.Include(o => o.FoodsInOrder)
         .ThenInclude(fio => fio.Food)
-            .ThenInclude(f => f.Restaurant) // Include the Restaurant navigation property
+            .ThenInclude(f => f.Restaurant) 
     .Include(o => o.Owner)
     .Include(o => o.Address)
     .ToList();

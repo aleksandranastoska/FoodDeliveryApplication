@@ -36,7 +36,6 @@ namespace FoodDeliveryApplication.Controllers
 
             ViewBag.Restaurants = restaurants;
 
-
             if (category == null)
             {
                 return NotFound();

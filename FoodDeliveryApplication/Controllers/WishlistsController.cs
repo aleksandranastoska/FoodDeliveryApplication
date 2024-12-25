@@ -211,8 +211,7 @@ namespace FoodDeliveryApplication.Controllers
 
             return newOrder; 
         }
-
-
+    
         [HttpPost]
         public async Task<IActionResult> PayOrder(string stripeEmail, string stripeToken)
         {

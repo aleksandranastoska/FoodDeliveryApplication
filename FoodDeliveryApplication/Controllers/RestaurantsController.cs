@@ -12,6 +12,8 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using static System.Collections.Specialized.BitVector32;
 using GemBox.Document.Tables;
 using GemBox.Document;
+using FoodDelivery.Repository.Interface;
+using FoodDelivery.Repository.Migrations;
 
 namespace FoodDeliveryApplication.Controllers
 {
@@ -23,8 +25,9 @@ namespace FoodDeliveryApplication.Controllers
         private readonly IFoodCategoryService _foodCategoryService;
         private readonly CreateRestaurantHelper _createRestaurantHelper;
         private readonly IsRestaurantAvailableHelper _isRestaurantAvailableHelper;
+        private readonly IUserRepository _userRepository;
 
-        public RestaurantsController(UserManager<FoodDeliveryAppUser> userManager, IRestaurantService restaurantService, ICategoryService categoryService, IFoodCategoryService foodCategoryService, CreateRestaurantHelper createRestaurantHelper, IsRestaurantAvailableHelper isRestaurantAvailableHelper)
+        public RestaurantsController(UserManager<FoodDeliveryAppUser> userManager, IRestaurantService restaurantService, ICategoryService categoryService, IFoodCategoryService foodCategoryService, CreateRestaurantHelper createRestaurantHelper, IsRestaurantAvailableHelper isRestaurantAvailableHelper, IUserRepository userRepository)
         {
             _userManager = userManager;
             _restaurantService = restaurantService;
@@ -32,6 +35,7 @@ namespace FoodDeliveryApplication.Controllers
             _foodCategoryService = foodCategoryService;
             _createRestaurantHelper = createRestaurantHelper;
             _isRestaurantAvailableHelper = isRestaurantAvailableHelper;
+            _userRepository = userRepository;
         }
 
         public async Task<IActionResult> Index()
@@ -260,6 +264,52 @@ namespace FoodDeliveryApplication.Controllers
             return View(menuDTO);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> AddToFavorites(Guid id, bool isFavorite)
+        {
+            var restaurant = _restaurantService.GetDetailsForRestaurant(id);
+
+            if (restaurant == null)
+            {
+                return NotFound();
+            }
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (userId == null)
+            {
+                throw new UnauthorizedAccessException("User not logged in.");
+            }
+
+            var owner = await _userManager.FindByIdAsync(userId);
+
+            if (owner == null)
+            {
+                throw new InvalidOperationException("User not found.");
+            }
+
+            var favoriteRestaurant = new FavoriteRestaurants
+            {
+                RestaurantId = restaurant.Id,
+                Restaurant = restaurant,
+                OwnerId = userId,
+                Owner = owner
+            };
+
+            if (!isFavorite)
+            {
+                AddRestaurantToFavorites(owner, favoriteRestaurant);
+            } 
+            else
+            {
+                RemoveRestaurantFromFavorites(owner, favoriteRestaurant);
+            }
+
+            ViewBag.IsFavorite = !isFavorite;
+
+            return RedirectToAction("Details", new { id = restaurant.Id });
+        }
+
         private bool RestaurantExists(Guid id)
         {
             return _restaurantService.GetDetailsForRestaurant(id) != null;
@@ -281,6 +331,39 @@ namespace FoodDeliveryApplication.Controllers
                 FoodCategoryId = food.FoodCategoryId,
                 RestaurantId = id
             }).ToList();
+        }
+
+        private void AddRestaurantToFavorites(FoodDeliveryAppUser owner, FavoriteRestaurants restaurant)
+        {
+            if (owner.FavoriteRestaurants == null)
+            {
+                var restaurantsList = new List<FavoriteRestaurants>();
+                restaurantsList.Add(restaurant);
+                owner.FavoriteRestaurants = restaurantsList;
+            }
+            else
+            {
+                var restaurantsLists = owner.FavoriteRestaurants.ToList();
+                restaurantsLists.Add(restaurant);
+                owner.FavoriteRestaurants = restaurantsLists;
+            }
+
+            _userRepository.Update(owner);
+        }
+
+        private void RemoveRestaurantFromFavorites(FoodDeliveryAppUser owner, FavoriteRestaurants restaurant)
+        {
+            var existingRestaurant = owner.FavoriteRestaurants
+            .FirstOrDefault(r => r.RestaurantId == restaurant.RestaurantId);
+
+            if (existingRestaurant != null)
+            {
+                var restaurantsLists = owner.FavoriteRestaurants.ToList();
+                restaurantsLists.Remove(existingRestaurant); 
+                owner.FavoriteRestaurants = restaurantsLists;
+
+                _userRepository.Update(owner);
+            }
         }
 
         [HttpGet]

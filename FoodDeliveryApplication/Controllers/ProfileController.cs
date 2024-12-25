@@ -1,6 +1,8 @@
 ﻿using FoodDelivery.Domain.Domain;
 using FoodDelivery.Domain.DTO;
 using FoodDelivery.Domain.Identity;
+using FoodDelivery.Repository.Interface;
+using FoodDelivery.Service.Implementation;
 using FoodDelivery.Service.Interface;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -12,11 +14,12 @@ namespace FoodDeliveryApplication.Controllers
     {
         private readonly UserManager<FoodDeliveryAppUser> _userManager;
         private readonly IUserService _userService;
-
-        public ProfileController(UserManager<FoodDeliveryAppUser> userManager, IUserService userService)
+        private readonly IAddressRepository _addressRepository;
+        public ProfileController(UserManager<FoodDeliveryAppUser> userManager, IUserService userService, IAddressRepository addressRepository)
         {
             _userManager = userManager;
             _userService = userService;
+            _addressRepository = addressRepository;
         }
 
         public async Task<IActionResult> Index()
@@ -40,7 +43,6 @@ namespace FoodDeliveryApplication.Controllers
         public async Task<IActionResult> Addresses(string? email)
         {
             var loggedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
 
             if (loggedInUserId == null)
             {
@@ -94,7 +96,7 @@ namespace FoodDeliveryApplication.Controllers
             {   
                 _userService.AddAddress(address);
 
-                return RedirectToAction("Addresses");
+                return RedirectToAction("Index");
             }
 
             return View(model);
@@ -119,5 +121,31 @@ namespace FoodDeliveryApplication.Controllers
             return Ok();
         }
 
+        public IActionResult DeleteAddress(Guid? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var address = _addressRepository.GetAddressById(id);
+
+            if (address == null)
+            {
+                return NotFound();
+            }
+
+            return View(address);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteConfirmed(Guid id)
+        {
+            var address = _addressRepository.GetAddressById(id);
+            _addressRepository.Delete(address);
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

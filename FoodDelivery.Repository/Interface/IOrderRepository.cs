@@ -5,7 +5,6 @@ namespace FoodDelivery.Repository.Interface
     {
         List<Order> GetAll();
         Order GetDetailsForOrder(Guid? id);
-
         Order GetDetailsForOrder(BaseEntity? id);
         void Insert(Order order);
         void Update(Order order);

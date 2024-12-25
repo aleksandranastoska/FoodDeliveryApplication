@@ -28,11 +28,6 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-dark" href="#">
-                            <i class="bi bi-heart"></i> Favorites
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" href="#">
                             <i class="bi bi-box-arrow-right"></i> Log Out
                         </a>
                     </li>
@@ -57,6 +52,7 @@
                                             <span class="badge" style="background-color: #B3C8CF; color: #F1F0E8;">@address.Number</span>
                                             <span class="badge" style="background-color: #B3C8CF; color: #F1F0E8;">@address.Flat</span>
                                         </p>
+                                        <p><a class="btn btn-danger" asp-controller="Profile" asp-action="DeleteAddress" asp-route-id="@address.Id">Delete</a></p>
                                     </div>
                                 </div>
                             </div>

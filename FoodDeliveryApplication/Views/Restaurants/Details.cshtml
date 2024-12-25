@@ -103,7 +103,6 @@
             color: #F1F0E8;
         }
 
-    /* Section Header */
     h4 {
         color: #89A8B2;
         font-weight: bold;
@@ -125,12 +124,6 @@
             <button class="btn btn-outline-primary mb-2" type="button">
                 Rating: @Model.Rating
             </button>
-            <a id="favorite-button"
-               data-restaurant-id="@Model.Id"
-               class="btn @(isFavoriteValue ? "btn-info" : "btn-warning") mb-2"
-               href="javascript:void(0);">
-                @(isFavoriteValue ? "Favorited" : "Add to Favorites")
-            </a>
         </div>
     </div>
 
@@ -204,29 +197,6 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    $(document).ready(function () {
-        $('#favorite-button').click(function (event) {
-            event.preventDefault();
-
-            var restaurantId = $(this).data('restaurant-id');
-            var token = $('input[name="__RequestVerificationToken"]').val();
-
-            $.ajax({
-                url: '@Url.Action("AddToFavorites", "Profile")',
-                type: 'POST',
-                data: {
-                    restaurantId: restaurantId,
-                    __RequestVerificationToken: token
-                },
-                success: function () {
-                    $('#favorite-button').text('Favorited').removeClass('btn-warning').addClass('btn-transparent');
-                },
-                error: function () {
-                    alert('Failed to add to favorites');
-                }
-            });
-        });
-    });
 
     function decreaseQuantity(foodId, foodPrice) {
         var quantityInput = document.getElementById('quantity-' + foodId);
@@ -245,4 +215,24 @@
             hiddenQuantityInput.value = quantityInput.value;
         }
     }
+
+        document.getElementById('favorite-button').addEventListener('click', function (event) {
+        event.preventDefault();
+
+        const form = document.getElementById('favorites-form');
+        fetch(form.action, {
+            method: 'POST',
+            body: new FormData(form),
+        })
+        .then(response => {
+            if (response.ok) {
+                // Toggle the button state
+                const button = document.getElementById('favorite-button');
+                const isFavorite = button.classList.contains('btn-info');
+                button.classList.toggle('btn-info', !isFavorite);
+                button.classList.toggle('btn-warning', isFavorite);
+                button.textContent = isFavorite ? 'Add to Favorites' : 'Favorite';
+            }
+        });
+    });
 </script>
