@@ -10,12 +10,14 @@ namespace FoodDelivery.Service.Implementation
         private readonly IUserRepository _userRepository;
         private readonly IAddressRepository _addressRepository;
         private readonly IRestaurantRepository _restaurantRepository;
+        private readonly IOrderRepository _orderRepository;
 
-        public UserService(IUserRepository userRepository, IAddressRepository addressRepository, IRestaurantRepository restaurantRepository)
+        public UserService(IUserRepository userRepository, IAddressRepository addressRepository, IRestaurantRepository restaurantRepository, IOrderRepository orderRepository)
         {
             _userRepository = userRepository;
             _addressRepository = addressRepository;
             _restaurantRepository = restaurantRepository;
+            _orderRepository = orderRepository;
         }
 
         public void AddAddress(Address address)
@@ -49,6 +51,17 @@ namespace FoodDelivery.Service.Implementation
 
             var addresses = _addressRepository.GetAllAddressesForUser(id);
             return addresses ?? new List<Address>();
+        }
+
+        public List<Order> GetAllOrdersForUser(string? id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return new List<Order>();
+            }
+
+            var orders = _orderRepository.GetAllOrdersForUser(id);
+            return orders ?? new List<Order>();
         }
 
         public List<FoodDeliveryAppUser> GetAllUsers()

@@ -2,7 +2,7 @@
 @using FoodDelivery.Domain.Identity
 @{
     var user = ViewBag.User as FoodDeliveryAppUser;
-    var addresses = ViewBag.Addresses as List<Address>;
+    var orders = ViewBag.Orders as List<Order>;
 }
 
 <div class="container my-5">
@@ -15,25 +15,21 @@
                 <div class="card-body text-center" style="background-color: #F1F0E8;">
                     <p class="mb-1 text-muted"><i class="bi bi-telephone-fill me-2"></i>@user.PhoneNumber</p>
                     <p class="mb-1 text-muted"><i class="bi bi-envelope-fill me-2"></i>@user.Email</p>
-                    <a class="btn btn-outline-primary btn-sm mt-3" style="color: #89A8B2; border-color: #89A8B2;" href="#">
+                    <a class="btn btn-outline-primary btn-sm mt-3" asp-controller="Profile" asp-action="Edit" style="color: #89A8B2; border-color: #89A8B2;">
                         <i class="bi bi-pencil"></i> Edit Profile
                     </a>
                 </div>
                 <ul class="nav nav-pills flex-column p-3" style="background-color: #E5E1DA;">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Orders" asp-action="AllOrders">
-                                <i class="bi bi-check-circle-fill me-2"></i> Finished Orders
-                            </a>
-                        </li>
+                    </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark active" href="#">
+                        <a class="nav-link text-dark active" asp-controller="Profile" asp-action="Addresses">
                             <i class="bi bi-geo-alt"></i> My Addresses
                         </a>
                     </li>
                     <li class="nav-item">
-                        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                            <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
-                        </form>
+                    <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                        <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+                    </form>
                     </li>
                 </ul>
             </div>
@@ -42,33 +38,23 @@
         <div class="col-md-9">
             <div class="card shadow-sm border-0">
                 <div class="card-body" style="background-color: #F1F0E8;">
-                    <h4 class="font-weight-bold mb-4" style="color: #89A8B2;">My Addresses</h4>
+                    <h4 class="font-weight-bold mb-4" style="color: #89A8B2;">My Orders</h4>
 
                     <div class="row">
-                        @foreach (var address in addresses)
+                        @foreach (var order in orders)
                         {
                             <div class="col-md-6">
                                 <div class="card mb-4" style="border: 1px solid #B3C8CF;">
                                     <div class="card-body">
-                                        <h6 class="card-title mb-1" style="color: #89A8B2;">@address.Title</h6>
+                                        <h6 class="card-title mb-1" style="color: #89A8B2;">@order.Address.Title</h6>
                                         <p class="card-text text-muted">
-                                            @address.Street,
-                                            <span class="badge" style="background-color: #B3C8CF; color: #F1F0E8;">@address.Number</span>
-                                            <span class="badge" style="background-color: #B3C8CF; color: #F1F0E8;">@address.Flat</span>
+                                            @order.Address.Street
                                         </p>
-                                        <p><a class="btn btn-danger" asp-controller="Profile" asp-action="DeleteAddress" asp-route-id="@address.Id">Delete</a></p>
+                                        <p><a class="btn btn-secondary" asp-controller="Orders" asp-action="Details" asp-route-id="@order.Id">Details</a></p>
                                     </div>
                                 </div>
                             </div>
                         }
-
-                        <div class="col-md-6">
-                            <div class="card border p-4 text-center">
-                                <a class="btn btn-primary w-100" style="background-color: #89A8B2; border-color: #89A8B2;" asp-action="AddAddress">
-                                    <i class="bi bi-plus-circle"></i> Add New Address
-                                </a>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>

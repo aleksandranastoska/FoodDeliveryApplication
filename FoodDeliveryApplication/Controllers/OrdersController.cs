@@ -178,6 +178,40 @@ namespace FoodDeliveryApplication.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public async Task<IActionResult> AllOrders(string? email)
+        {
+            var loggedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (loggedInUserId == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var loggedInUser = await _userManager.FindByIdAsync(loggedInUserId);
+
+            if (loggedInUser == null)
+            {
+                return NotFound("User not found");
+            }
+
+            if (string.IsNullOrEmpty(email))
+            {
+                email = loggedInUser.Email;
+            }
+
+            var orders = _userService.GetAllOrdersForUser(loggedInUserId);
+
+            if (orders == null || !orders.Any())
+            {
+                orders = new List<Order>();
+            }
+
+            ViewBag.User = loggedInUser;
+            ViewBag.Orders = orders;
+
+            return View();
+        }
+
         private bool OrderExists(Guid id)
         {
             return _orderService.GetDetailsForOrder(id) != null;

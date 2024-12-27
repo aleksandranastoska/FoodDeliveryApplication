@@ -251,8 +251,8 @@ namespace FoodDeliveryApplication.Controllers
 
                 if (charge.Status == "succeeded")
                 {
-                    var newOrder = await PlaceOrder(); // Get the created order
-                    return RedirectToAction("Index", "Orders", new { orderId = newOrder.Id }); // Redirect with order ID
+                    var newOrder = await PlaceOrder(); 
+                    return RedirectToAction("Index", "Orders", new { orderId = newOrder.Id }); 
                 }
                 else
                 {

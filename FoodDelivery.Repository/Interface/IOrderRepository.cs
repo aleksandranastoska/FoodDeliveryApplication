@@ -9,5 +9,6 @@ namespace FoodDelivery.Repository.Interface
         void Insert(Order order);
         void Update(Order order);
         void Delete(Order order);
+        List<Order> GetAllOrdersForUser(string? userId);
     }
 }

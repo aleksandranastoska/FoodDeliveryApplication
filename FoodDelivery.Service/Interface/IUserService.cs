@@ -11,5 +11,6 @@ namespace FoodDelivery.Service.Interface
         void AddAddress(Address address);
         Task<bool> AddToFavorites(string userId, Guid restaurantId);
         void UpdateExistingUser(FoodDeliveryAppUser user);
+        List<Order> GetAllOrdersForUser(string? id);
     }
 }

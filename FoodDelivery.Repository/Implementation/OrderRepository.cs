@@ -33,6 +33,23 @@ namespace FoodDelivery.Repository.Implementation
     .ToList();
         }
 
+        public List<Order> GetAllOrdersForUser(string? userId)
+        {
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new ArgumentNullException(nameof(userId));
+            }
+
+            var entities = _context.Orders.AsQueryable();
+
+            if (entities == null)
+            {
+                return new List<Order>();
+            }
+
+            return entities.Where(order => order.UserId == userId).ToList();
+        }
+
         public Order GetDetailsForOrder(BaseEntity? id)
         {
             return entities.Include(o => o.Address)
