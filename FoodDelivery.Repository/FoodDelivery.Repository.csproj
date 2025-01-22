@@ -25,5 +25,9 @@
   <ItemGroup>
     <ProjectReference Include="..\FoodDelivery.Domain\FoodDelivery.Domain.csproj" />
   </ItemGroup>
+	<ItemGroup>
+		<Content Include="FoodDelivery.Repository\Images\**" CopyToOutputDirectory="PreserveNewest" />
+	</ItemGroup>
+
 
 </Project>

@@ -52,20 +52,21 @@ namespace FoodDelivery.Repository
         private void SeedCategories(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Category>().HasData(
-                new Category { Id = Guid.NewGuid(), Name = "Italian", Image = "../Images/italian.png" },
-                new Category { Id = Guid.NewGuid(), Name = "Chinese", Image = "../Images/chinese.png" },
-                new Category { Id = Guid.NewGuid(), Name = "Mexican", Image = "../Images/mexican.png" },
-                new Category { Id = Guid.NewGuid(), Name = "Indian", Image = "../Images/indian.png" },
-                new Category { Id = Guid.NewGuid(), Name = "American", Image = "../Images/american.png" },
-                new Category { Id = Guid.NewGuid(), Name = "Greek", Image = "../Images/greek.jfif" },
-                new Category { Id = Guid.NewGuid(), Name = "Vegan", Image = "../Images/vegan.png" },
-                new Category { Id = Guid.NewGuid(), Name = "Vegetarian", Image = "../Images/vegetarian.png" },
-                new Category { Id = Guid.NewGuid(), Name = "Healthy", Image = "../Images/healthy.png" },
-                new Category { Id = Guid.NewGuid(), Name = "Asian", Image = "../Images/asian.png" },
-                new Category { Id = Guid.NewGuid(), Name = "Breakfast", Image = "../Images/breakfast.png" },
-                new Category { Id = Guid.NewGuid(), Name = "Desserts", Image = "../Images/desserts.png" }
+                new Category { Id = Guid.NewGuid(), Name = "Italian", Image = "/Images/italian.png" },
+                new Category { Id = Guid.NewGuid(), Name = "Chinese", Image = "/Images/chinese.png" },
+                new Category { Id = Guid.NewGuid(), Name = "Mexican", Image = "/Images/mexican.png" },
+                new Category { Id = Guid.NewGuid(), Name = "Indian", Image = "/Images/indian.png" },
+                new Category { Id = Guid.NewGuid(), Name = "American", Image = "/Images/american.png" },
+                new Category { Id = Guid.NewGuid(), Name = "Greek", Image = "/Images/greek.jfif" },
+                new Category { Id = Guid.NewGuid(), Name = "Vegan", Image = "/Images/vegan.png" },
+                new Category { Id = Guid.NewGuid(), Name = "Vegetarian", Image = "/Images/vegetarian.png" },
+                new Category { Id = Guid.NewGuid(), Name = "Healthy", Image = "/Images/healthy.png" },
+                new Category { Id = Guid.NewGuid(), Name = "Asian", Image = "/Images/asian.png" },
+                new Category { Id = Guid.NewGuid(), Name = "Breakfast", Image = "/Images/breakfast.png" },
+                new Category { Id = Guid.NewGuid(), Name = "Desserts", Image = "/Images/desserts.png" }
             );
         }
+
 
         private void SeedFoodCategories(ModelBuilder modelBuilder)
         {

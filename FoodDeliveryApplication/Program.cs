@@ -45,6 +45,9 @@ builder.Services.AddDefaultIdentity<FoodDeliveryAppUser>(options => options.Sign
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -57,16 +60,24 @@ else
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
-app.UseStaticFiles();
+// Define the images directory under wwwroot
+var imagesPath = Path.Combine(app.Environment.WebRootPath, "Images");
 
-app.UseStaticFiles(new StaticFileOptions
+// Ensure the directory exists
+if (!Directory.Exists(imagesPath))
 {
-    FileProvider = new PhysicalFileProvider(
-        Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).FullName, "FoodDelivery.Repository", "Images")),
-    RequestPath = "/Images"
-});
+    Console.WriteLine($"Directory not found: {imagesPath}");
+    Directory.CreateDirectory(imagesPath);
+}
 
+// Serve static files from the images directory
+//app.UseStaticFiles(new StaticFileOptions
+//{
+//    FileProvider = new PhysicalFileProvider(imagesPath),
+//    RequestPath = "/Images"
+//});
+
+app.UseStaticFiles(); 
 
 app.UseRouting();
 

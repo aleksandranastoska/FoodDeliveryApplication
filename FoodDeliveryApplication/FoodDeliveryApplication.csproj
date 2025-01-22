@@ -8,6 +8,36 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\Images\american.png" />
+    <Content Remove="wwwroot\Images\asian.png" />
+    <Content Remove="wwwroot\Images\breakfast.png" />
+    <Content Remove="wwwroot\Images\chinese.png" />
+    <Content Remove="wwwroot\Images\desserts.png" />
+    <Content Remove="wwwroot\Images\greek.jfif" />
+    <Content Remove="wwwroot\Images\healthy.png" />
+    <Content Remove="wwwroot\Images\indian.png" />
+    <Content Remove="wwwroot\Images\italian.png" />
+    <Content Remove="wwwroot\Images\mexican.png" />
+    <Content Remove="wwwroot\Images\vegan.png" />
+    <Content Remove="wwwroot\Images\vegetarian.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\Images\american.png" />
+    <None Include="wwwroot\Images\asian.png" />
+    <None Include="wwwroot\Images\breakfast.png" />
+    <None Include="wwwroot\Images\chinese.png" />
+    <None Include="wwwroot\Images\desserts.png" />
+    <None Include="wwwroot\Images\greek.jfif" />
+    <None Include="wwwroot\Images\healthy.png" />
+    <None Include="wwwroot\Images\indian.png" />
+    <None Include="wwwroot\Images\italian.png" />
+    <None Include="wwwroot\Images\mexican.png" />
+    <None Include="wwwroot\Images\vegan.png" />
+    <None Include="wwwroot\Images\vegetarian.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.5.1" />
     <PackageReference Include="GemBox.Document" Version="35.0.1906" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.7" />
